@@ -557,76 +557,54 @@
 
 
     /*
-      分享
-    */
+   /* =========================
+   分享
+========================= */
 
-    async function shareSong(songId) {
+async function shareSong(songId) {
 
-      const song =
-        songs.find(
-          item => item.id === songId
-        );
+    const song = songs.find(item => item.id === songId);
 
-
-      const shareData = {
-
-        title:
-          "自由品勢 " +
-          song.title,
-
-        text:
-          "自由品勢音樂線上試聽。",
-
-        url:
-          window.location.href
-      };
-
-
-      if (navigator.share) {
-
-        try {
-
-          await navigator.share(
-            shareData
-          );
-
-        }
-
-        catch (error) {
-
-          console.log(
-            "取消分享"
-          );
-        }
-
-      }
-
-      else {
-
-        try {
-
-          await navigator
-            .clipboard
-            .writeText(
-              window.location.href
-            );
-
-
-          alert(
-            "網站網址已複製，可以貼到 LINE 或其他地方分享。"
-          );
-
-        }
-
-        catch (error) {
-
-          alert(
-            "目前無法自動分享，請手動複製網址。"
-          );
-        }
-      }
+    if (!song) {
+        alert("找不到這首音樂");
+        return;
     }
 
+    const shareData = {
+        title: "自由品勢音樂庫 - " + song.title,
+        text: "自由品勢音樂線上試聽：" + song.title,
+        url: window.location.href
+    };
+
+    // 手機或支援 Web Share API 的瀏覽器
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+            return;
+        } catch (error) {
+            // 使用者自己取消分享時，不顯示錯誤
+            if (error.name === "AbortError") {
+                return;
+            }
+        }
+    }
+
+    // 電腦或不支援分享功能的瀏覽器：改成複製網址
+    try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("分享連結已複製！\n可以貼到 LINE、Facebook 或其他地方分享。");
+    } catch (error) {
+        // 最後備用方式
+        const tempInput = document.createElement("textarea");
+        tempInput.value = window.location.href;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+
+        alert("分享連結已複製！\n可以貼到 LINE、Facebook 或其他地方分享。");
+    }
+}
 
     /*
       下載音樂
