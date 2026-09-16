@@ -2,7 +2,6 @@
 <html lang="zh-Hant">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -50,100 +49,63 @@
       width: 90%;
       max-width: 900px;
       margin: 25px auto 10px;
-
       display: grid;
-
-      grid-template-columns:
-        1fr 180px;
-
+      grid-template-columns: 1fr 180px;
       gap: 10px;
     }
 
     .search-box,
     .category-select {
-
       width: 100%;
-
       padding: 13px;
-
       border: none;
-
       border-radius: 12px;
-
       background: #1c1c27;
-
       color: white;
-
       font-size: 16px;
     }
 
     .tabs {
-
       width: 90%;
-
       max-width: 900px;
-
       margin: 15px auto;
-
       display: flex;
-
       gap: 10px;
     }
 
     .tab-button {
-
       flex: 1;
-
       padding: 12px;
-
       border: none;
-
       border-radius: 12px;
-
       background: #242432;
-
       color: white;
-
       font-size: 16px;
-
       cursor: pointer;
     }
 
     .tab-button.active {
-
       background: #744cff;
     }
 
     .stats {
-
       width: 90%;
-
       max-width: 900px;
-
       margin: 15px auto 25px;
-
       color: #b7b7c8;
-
       font-size: 14px;
     }
 
     .music-list {
-
       width: 90%;
-
       max-width: 900px;
-
       margin: 0 auto;
     }
 
     .music-card {
-
       background: #181821;
-
       border-radius: 20px;
-
       padding: 24px;
-
       margin-bottom: 22px;
 
       box-shadow:
@@ -152,137 +114,189 @@
     }
 
     .music-card h2 {
-
       margin-top: 0;
-
       margin-bottom: 8px;
-
       font-size: 25px;
     }
 
     .info {
-
       color: #bdbdcc;
-
       font-size: 15px;
-
       line-height: 1.7;
-
-      margin-bottom: 18px;
+      margin-bottom: 8px;
     }
 
     .download-count {
-
       color: #9898aa;
-
       font-size: 14px;
-
       margin-bottom: 15px;
     }
 
-    audio {
+    /*
+      =========================
+      播放器區
+      =========================
+    */
 
-      width: 100%;
-
-      margin-bottom: 16px;
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
     }
 
-    .action-row {
+    audio {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /*
+      愛心
+    */
+
+    .heart-button {
+      width: 46px;
+      height: 46px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: #292936;
+
+      color: #ffffff;
+
+      font-size: 25px;
+
+      cursor: pointer;
 
       display: flex;
+      align-items: center;
+      justify-content: center;
 
-      gap: 10px;
-
-      margin-bottom: 12px;
+      flex-shrink: 0;
     }
 
-    .favorite-button,
-    .share-button {
+    .heart-button.active {
+      color: #ff4f75;
+      background: #38242c;
+    }
 
-      flex: 1;
+    /*
+      三個點
+    */
 
-      padding: 12px;
+    .menu-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .menu-button {
+      width: 46px;
+      height: 46px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: #292936;
+
+      color: white;
+
+      font-size: 25px;
+
+      cursor: pointer;
+    }
+
+    /*
+      三點選單
+    */
+
+    .more-menu {
+      display: none;
+
+      position: absolute;
+
+      right: 0;
+      top: 52px;
+
+      width: 170px;
+
+      background: #292936;
+
+      border-radius: 13px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.45);
+
+      z-index: 100;
+    }
+
+    .more-menu.show {
+      display: block;
+    }
+
+    .menu-item {
+      width: 100%;
+
+      padding: 14px 16px;
 
       border: none;
 
-      border-radius: 12px;
-
-      background: #2b2b38;
+      background: transparent;
 
       color: white;
 
       font-size: 16px;
 
-      cursor: pointer;
-    }
-
-    .favorite-button.active {
-
-      background: #ff4f75;
-    }
-
-    .download-button {
-
-      width: 100%;
-
-      padding: 14px;
-
-      border: none;
-
-      border-radius: 12px;
-
-      background: #744cff;
-
-      color: white;
-
-      font-size: 18px;
-
-      font-weight: bold;
+      text-align: left;
 
       cursor: pointer;
     }
 
-    .download-button:hover {
+    .menu-item:hover {
+      background: #3b3b4b;
+    }
 
-      background: #8a68ff;
+    .menu-divider {
+      height: 1px;
+      background: #444454;
     }
 
     .empty {
-
       text-align: center;
-
       color: #9999aa;
-
       padding: 50px 20px;
     }
 
     .footer {
-
       text-align: center;
-
       padding: 35px 20px;
-
       color: #777788;
-
       font-size: 13px;
     }
 
     @media (max-width: 650px) {
 
       .controls {
-
         grid-template-columns: 1fr;
       }
 
       .header h1 {
-
         font-size: 31px;
+      }
+
+      .heart-button,
+      .menu-button {
+        width: 42px;
+        height: 42px;
       }
     }
 
   </style>
-
 </head>
+
 
 <body>
 
@@ -300,7 +314,7 @@
   </div>
 
 
-  <!-- 搜尋與分類 -->
+  <!-- 搜尋 -->
 
   <div class="controls">
 
@@ -343,7 +357,7 @@
   </div>
 
 
-  <!-- 全部音樂 / 我的最愛 -->
+  <!-- 分頁 -->
 
   <div class="tabs">
 
@@ -354,6 +368,7 @@
     >
       🎵 全部音樂
     </button>
+
 
     <button
       id="favoriteTab"
@@ -369,517 +384,705 @@
   <div
     id="stats"
     class="stats"
-  >
-  </div>
+  ></div>
 
-
-  <!-- 音樂列表 -->
 
   <div
     id="musicList"
     class="music-list"
-  >
-  </div>
+  ></div>
 
 
   <div class="footer">
-
     自由品勢音樂庫
-
   </div>
 
 
-  <script>
+
+<script>
+
+/*
+=========================================
+音樂資料
+=========================================
+*/
+
+const songs = [
+
+  {
+    id: "music01",
+
+    title: "音樂 01",
 
     /*
-      ============================================
-      音樂資料
-      ============================================
-
-      以後你新增歌曲，
-      主要就是在這裡新增一組資料。
+      現在正式使用 MP3
     */
 
-    const songs = [
+    file: "music01.mp3",
 
-      {
-        id: "music01",
+    downloadName:
+      "自由品勢音樂01.mp3",
 
-        title: "音樂 01",
+    duration: "94 秒",
 
-        file: "music01.aac",
+    category: "震撼",
 
-        downloadName:
-          "自由品勢音樂01.aac",
+    tags:
+      "純音樂 ｜ 震撼卡點 ｜ 自由品勢"
+  }
 
-        duration: "94 秒",
+];
 
-        category: "震撼",
 
-        tags:
-          "純音樂 ｜ 震撼卡點 ｜ 自由品勢"
+let favoritesOnly = false;
+
+
+/*
+=========================================
+收藏
+=========================================
+*/
+
+function isFavorite(songId) {
+
+  return (
+    localStorage.getItem(
+      "favorite_" + songId
+    ) === "true"
+  );
+
+}
+
+
+function toggleFavorite(songId) {
+
+  const current =
+    isFavorite(songId);
+
+
+  localStorage.setItem(
+
+    "favorite_" + songId,
+
+    current
+      ? "false"
+      : "true"
+
+  );
+
+
+  renderSongs();
+
+}
+
+
+/*
+=========================================
+下載次數
+=========================================
+*/
+
+function getDownloadCount(songId) {
+
+  return parseInt(
+
+    localStorage.getItem(
+      "downloads_" + songId
+    ) || "0"
+
+  );
+
+}
+
+
+/*
+=========================================
+全部音樂
+=========================================
+*/
+
+function showAllSongs() {
+
+  favoritesOnly = false;
+
+
+  document
+    .getElementById("allTab")
+    .classList.add("active");
+
+
+  document
+    .getElementById("favoriteTab")
+    .classList.remove("active");
+
+
+  renderSongs();
+
+}
+
+
+/*
+=========================================
+我的最愛
+=========================================
+*/
+
+function showFavorites() {
+
+  favoritesOnly = true;
+
+
+  document
+    .getElementById("favoriteTab")
+    .classList.add("active");
+
+
+  document
+    .getElementById("allTab")
+    .classList.remove("active");
+
+
+  renderSongs();
+
+}
+
+
+/*
+=========================================
+三個點選單
+=========================================
+*/
+
+function toggleMenu(songId, event) {
+
+  event.stopPropagation();
+
+
+  /*
+    先關閉其他選單
+  */
+
+  document
+    .querySelectorAll(".more-menu")
+    .forEach(menu => {
+
+      if (
+        menu.id !==
+        "menu_" + songId
+      ) {
+
+        menu.classList.remove("show");
+
       }
 
-      /*
-      ===============================
-
-      以後有第 2 首時，
-      把下面這段打開：
-
-      ,
-
-      {
-        id: "music02",
-
-        title: "音樂 02",
-
-        file: "music02.aac",
-
-        downloadName:
-          "自由品勢音樂02.aac",
-
-        duration: "95 秒",
-
-        category: "東方",
-
-        tags:
-          "純音樂 ｜ 東方武術 ｜ 自由品勢"
-      }
-
-      ===============================
-      */
-
-    ];
+    });
 
 
-    let favoritesOnly = false;
+  const menu =
+    document.getElementById(
+      "menu_" + songId
+    );
 
 
-    /*
-      取得收藏狀態
-    */
+  menu.classList.toggle("show");
 
-    function isFavorite(songId) {
-
-      return (
-        localStorage.getItem(
-          "favorite_" + songId
-        ) === "true"
-      );
-    }
+}
 
 
-    /*
-      收藏 / 取消收藏
-    */
-
-    function toggleFavorite(songId) {
-
-      const current =
-        isFavorite(songId);
-
-
-      localStorage.setItem(
-
-        "favorite_" + songId,
-
-        current
-          ? "false"
-          : "true"
-
-      );
-
-
-      renderSongs();
-    }
-
-
-    /*
-      取得下載次數
-    */
-
-    function getDownloadCount(songId) {
-
-      return parseInt(
-
-        localStorage.getItem(
-          "downloads_" + songId
-        ) || "0"
-
-      );
-    }
-
-
-    /*
-      全部音樂
-    */
-
-    function showAllSongs() {
-
-      favoritesOnly = false;
-
-
-      document
-        .getElementById("allTab")
-        .classList.add("active");
-
-
-      document
-        .getElementById("favoriteTab")
-        .classList.remove("active");
-
-
-      renderSongs();
-    }
-
-
-    /*
-      我的最愛
-    */
-
-    function showFavorites() {
-
-      favoritesOnly = true;
-
-
-      document
-        .getElementById("favoriteTab")
-        .classList.add("active");
-
-
-      document
-        .getElementById("allTab")
-        .classList.remove("active");
-
-
-      renderSongs();
-    }
-
-
-    /*
-   /* =========================
-   分享
-========================= */
+/*
+=========================================
+分享
+=========================================
+*/
 
 async function shareSong(songId) {
 
-    const song = songs.find(item => item.id === songId);
+  closeMenus();
 
-    if (!song) {
-        alert("找不到這首音樂");
-        return;
-    }
 
-    const shareData = {
-        title: "自由品勢音樂庫 - " + song.title,
-        text: "自由品勢音樂線上試聽：" + song.title,
-        url: window.location.href
-    };
+  const song =
+    songs.find(
+      item => item.id === songId
+    );
 
-    // 手機或支援 Web Share API 的瀏覽器
-    if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-            return;
-        } catch (error) {
-            // 使用者自己取消分享時，不顯示錯誤
-            if (error.name === "AbortError") {
-                return;
-            }
-        }
-    }
 
-    // 電腦或不支援分享功能的瀏覽器：改成複製網址
+  if (!song) {
+
+    alert("找不到這首音樂");
+
+    return;
+
+  }
+
+
+  /*
+    分享網站網址
+  */
+
+  const shareData = {
+
+    title:
+      "自由品勢音樂庫 - " +
+      song.title,
+
+    text:
+      "自由品勢音樂線上試聽：" +
+      song.title,
+
+    url:
+      window.location.href
+
+  };
+
+
+  /*
+    手機原生分享
+  */
+
+  if (navigator.share) {
+
     try {
-        await navigator.clipboard.writeText(window.location.href);
-        alert("分享連結已複製！\n可以貼到 LINE、Facebook 或其他地方分享。");
-    } catch (error) {
-        // 最後備用方式
-        const tempInput = document.createElement("textarea");
-        tempInput.value = window.location.href;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
 
-        alert("分享連結已複製！\n可以貼到 LINE、Facebook 或其他地方分享。");
-    }
-}
-
-    /*
-      下載音樂
-    */
-
-    function downloadMusic(songId) {
-
-      const song =
-        songs.find(
-          item => item.id === songId
-        );
-
-
-      /*
-        增加下載次數
-      */
-
-      const oldCount =
-        getDownloadCount(songId);
-
-
-      localStorage.setItem(
-
-        "downloads_" + songId,
-
-        oldCount + 1
-
+      await navigator.share(
+        shareData
       );
 
+      return;
 
-      /*
-        開始下載
-      */
-
-      const link =
-        document.createElement("a");
-
-
-      link.href =
-        song.file;
-
-
-      link.download =
-        song.downloadName;
-
-
-      document.body.appendChild(
-        link
-      );
-
-
-      link.click();
-
-
-      document.body.removeChild(
-        link
-      );
-
-
-      /*
-        更新畫面
-      */
-
-      renderSongs();
     }
 
-
-    /*
-      顯示歌曲
-    */
-
-    function renderSongs() {
-
-      const musicList =
-        document.getElementById(
-          "musicList"
-        );
-
-
-      const search =
-        document
-          .getElementById(
-            "searchInput"
-          )
-          .value
-          .trim()
-          .toLowerCase();
-
-
-      const category =
-        document
-          .getElementById(
-            "categorySelect"
-          )
-          .value;
-
-
-      /*
-        篩選歌曲
-      */
-
-      const filteredSongs =
-        songs.filter(song => {
-
-
-          const matchSearch =
-
-            song.title
-              .toLowerCase()
-              .includes(search)
-
-            ||
-
-            song.tags
-              .toLowerCase()
-              .includes(search);
-
-
-          const matchCategory =
-
-            category === "全部"
-
-            ||
-
-            song.category === category;
-
-
-          const matchFavorite =
-
-            !favoritesOnly
-
-            ||
-
-            isFavorite(song.id);
-
-
-          return (
-
-            matchSearch
-
-            &&
-
-            matchCategory
-
-            &&
-
-            matchFavorite
-
-          );
-
-        });
-
-
-      /*
-        沒有歌曲
-      */
+    catch (error) {
 
       if (
-        filteredSongs.length === 0
+        error.name === "AbortError"
       ) {
 
-        musicList.innerHTML = `
-
-          <div class="empty">
-
-            目前沒有符合條件的音樂
-
-          </div>
-
-        `;
-
-        updateStats();
-
         return;
+
       }
 
+    }
 
-      /*
-     顯示歌曲
-      */
-
-      musicList.innerHTML =
-
-        filteredSongs
-          .map(song => {
+  }
 
 
-            const favorite =
-              isFavorite(song.id);
+  /*
+    電腦沒有原生分享：
+    自動複製網址
+  */
+
+  try {
+
+    await navigator.clipboard.writeText(
+      window.location.href
+    );
 
 
-            const downloads =
-              getDownloadCount(
-                song.id
-              );
+    alert(
+      "分享連結已複製！\n\n" +
+      "現在可以直接貼到 LINE、Facebook 或其他地方。"
+    );
+
+  }
+
+  catch (error) {
 
 
-            return `
-
-              <div class="music-card">
-
-
-                <h2>
-
-                  ${song.title}
-
-                </h2>
+    const tempInput =
+      document.createElement(
+        "textarea"
+      );
 
 
-                <div class="info">
+    tempInput.value =
+      window.location.href;
 
-                  ${song.duration}
 
-                  <br>
+    document.body.appendChild(
+      tempInput
+    );
 
-                  ${song.tags}
 
-                </div>
+    tempInput.select();
+
+
+    document.execCommand(
+      "copy"
+    );
+
+
+    document.body.removeChild(
+      tempInput
+    );
+
+
+    alert(
+      "分享連結已複製！"
+    );
+
+  }
+
+}
+
+
+/*
+=========================================
+下載 MP3
+不詢問姓名
+直接下載
+=========================================
+*/
+
+function downloadMusic(songId) {
+
+  closeMenus();
+
+
+  const song =
+    songs.find(
+      item => item.id === songId
+    );
+
+
+  if (!song) {
+
+    alert("找不到音樂檔案");
+
+    return;
+
+  }
+
+
+  /*
+    增加本機下載次數
+  */
+
+  const oldCount =
+    getDownloadCount(songId);
+
+
+  localStorage.setItem(
+
+    "downloads_" + songId,
+
+    oldCount + 1
+
+  );
+
+
+  /*
+    直接下載 MP3
+  */
+
+  const link =
+    document.createElement("a");
+
+
+  link.href =
+    song.file;
+
+
+  link.download =
+    song.downloadName;
+
+
+  document.body.appendChild(
+    link
+  );
+
+
+  link.click();
+
+
+  document.body.removeChild(
+    link
+  );
+
+
+  renderSongs();
+
+}
+
+
+/*
+=========================================
+關閉所有三點選單
+=========================================
+*/
+
+function closeMenus() {
+
+  document
+    .querySelectorAll(".more-menu")
+    .forEach(menu => {
+
+      menu.classList.remove("show");
+
+    });
+
+}
+
+
+/*
+點畫面其他地方，
+自動收起三點選單
+*/
+
+document.addEventListener(
+  "click",
+  closeMenus
+);
+
+
+/*
+=========================================
+顯示歌曲
+=========================================
+*/
+
+function renderSongs() {
+
+  const musicList =
+    document.getElementById(
+      "musicList"
+    );
+
+
+  const search =
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const category =
+    document
+      .getElementById(
+        "categorySelect"
+      )
+      .value;
+
+
+  const filteredSongs =
+    songs.filter(song => {
+
+
+      const matchSearch =
+
+        song.title
+          .toLowerCase()
+          .includes(search)
+
+        ||
+
+        song.tags
+          .toLowerCase()
+          .includes(search);
+
+
+      const matchCategory =
+
+        category === "全部"
+
+        ||
+
+        song.category === category;
+
+
+      const matchFavorite =
+
+        !favoritesOnly
+
+        ||
+
+        isFavorite(song.id);
+
+
+      return (
+
+        matchSearch
+
+        &&
+
+        matchCategory
+
+        &&
+
+        matchFavorite
+
+      );
+
+    });
+
+
+  /*
+    沒有歌曲
+  */
+
+  if (
+    filteredSongs.length === 0
+  ) {
+
+    musicList.innerHTML = `
+
+      <div class="empty">
+
+        目前沒有符合條件的音樂
+
+      </div>
+
+    `;
+
+
+    updateStats();
+
+    return;
+
+  }
+
+
+  /*
+    建立歌曲卡片
+  */
+
+  musicList.innerHTML =
+
+    filteredSongs
+      .map(song => {
+
+
+        const favorite =
+          isFavorite(song.id);
+
+
+        const downloads =
+          getDownloadCount(
+            song.id
+          );
+
+
+        return `
+
+          <div class="music-card">
+
+
+            <h2>
+              ${song.title}
+            </h2>
+
+
+            <div class="info">
+
+              ${song.duration}
+
+              <br>
+
+              ${song.tags}
+
+            </div>
+
+
+            <div class="download-count">
+
+              ⬇ 已下載
+              ${downloads}
+              次
+
+            </div>
+
+
+            <!--
+              播放器 + 愛心 + 三點
+            -->
+
+            <div class="player-row">
+
+
+              <audio controls>
+
+                <source
+                  src="${song.file}"
+                  type="audio/mpeg"
+                >
+
+                您的瀏覽器不支援音樂播放。
+
+              </audio>
+
+
+              <!-- 愛心 -->
+
+              <button
+
+                class="
+                  heart-button
+                  ${favorite
+                    ? "active"
+                    : ""}
+                "
+
+                title="收藏"
+
+                onclick="
+                  toggleFavorite(
+                    '${song.id}'
+                  )
+                "
+
+              >
+
+                ${
+                  favorite
+                    ? "♥"
+                    : "♡"
+                }
+
+              </button>
+
+
+              <!-- 三個點 -->
+
+              <div
+                class="menu-wrapper"
+                onclick="event.stopPropagation()"
+              >
+
+
+                <button
+
+                  class="menu-button"
+
+                  title="更多"
+
+                  onclick="
+                    toggleMenu(
+                      '${song.id}',
+                      event
+                    )
+                  "
+
+                >
+
+                  ⋮
+
+                </button>
 
 
                 <div
-                  class="download-count"
+
+                  id="menu_${song.id}"
+
+                  class="more-menu"
+
                 >
 
-                  ⬇ 已下載
-                  ${downloads}
-                  次
-
-                </div>
-
-
-                <audio controls>
-
-                  <source
-                    src="${song.file}"
-                    type="audio/aac"
-                  >
-
-                  您的瀏覽器不支援音樂播放。
-
-                </audio>
-
-
-                <div class="action-row">
-
 
                   <button
 
-                    class="
-                      favorite-button
-                      ${favorite
-                        ? "active"
-                        : ""}
-                    "
-
-                    onclick="
-                      toggleFavorite(
-                        '${song.id}'
-                      )
-                    "
-
-                  >
-
-                    ${
-                      favorite
-                        ? "♥ 已收藏"
-                        : "♡ 我的最愛"
-                    }
-
-                  </button>
-
-
-                  <button
-
-                    class="share-button"
+                    class="menu-item"
 
                     onclick="
                       shareSong(
@@ -894,100 +1097,119 @@ async function shareSong(songId) {
                   </button>
 
 
+                  <div
+                    class="menu-divider"
+                  ></div>
+
+
+                  <button
+
+                    class="menu-item"
+
+                    onclick="
+                      downloadMusic(
+                        '${song.id}'
+                      )
+                    "
+
+                  >
+
+                    ⬇ 下載 MP3
+
+                  </button>
+
+
                 </div>
-
-
-                <button
-
-                  class="download-button"
-
-                  onclick="
-                    downloadMusic(
-                      '${song.id}'
-                    )
-                  "
-
-                >
-
-                  ⬇ 下載
-
-                </button>
 
 
               </div>
 
-            `;
 
-          })
-          .join("");
+            </div>
 
 
-      updateStats();
+          </div>
 
-    }
+        `;
 
+      })
 
-    /*
-      顯示統計
-    */
-
-    function updateStats() {
-
-      let totalDownloads = 0;
-
-      let totalFavorites = 0;
+      .join("");
 
 
-      songs.forEach(song => {
+  updateStats();
 
-        totalDownloads +=
-          getDownloadCount(
-            song.id
-          );
+}
 
 
-        if (
-          isFavorite(song.id)
-        ) {
+/*
+=========================================
+統計
+=========================================
+*/
 
-          totalFavorites++;
-        }
+function updateStats() {
 
-      });
+  let totalDownloads = 0;
+
+  let totalFavorites = 0;
 
 
-      document
-        .getElementById(
-          "stats"
-        )
-        .innerHTML =
+  songs.forEach(song => {
 
-          "🎵 音樂：" +
-          songs.length +
-          " 首" +
 
-          "　｜　" +
+    totalDownloads +=
+      getDownloadCount(
+        song.id
+      );
 
-          "♥ 收藏：" +
-          totalFavorites +
-          " 首" +
 
-          "　｜　" +
+    if (
+      isFavorite(song.id)
+    ) {
 
-          "⬇ 下載：" +
-          totalDownloads +
-          " 次";
+      totalFavorites++;
 
     }
 
+  });
 
-    /*
-      網頁第一次開啟
-    */
 
-    renderSongs();
+  document
+    .getElementById(
+      "stats"
+    )
+    .innerHTML =
 
-  </script>
+      "🎵 音樂：" +
+      songs.length +
+      " 首" +
+
+      "　｜　" +
+
+      "♥ 收藏：" +
+      totalFavorites +
+      " 首" +
+
+      "　｜　" +
+
+      "⬇ 下載：" +
+      totalDownloads +
+      " 次";
+
+}
+
+
+/*
+=========================================
+第一次開啟網站
+=========================================
+*/
+
+renderSongs();
+
+
+</script>
 
 
 </body>
