@@ -1356,13 +1356,20 @@
 
     <p>請輸入密碼進入音樂庫</p>
 
-    <input
-      id="sitePassword"
-      type="password"
-      inputmode="numeric"
-      placeholder="請輸入密碼"
-      onkeydown="if(event.key === 'Enter') checkPassword()"
-    >
+   <input
+  id="sitePassword"
+  type="password"
+  inputmode="numeric"
+  placeholder="請輸入密碼"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="off"
+  spellcheck="false"
+  data-lpignore="true"
+  data-1p-ignore="true"
+  name="music-library-access-code"
+  onkeydown="if(event.key === 'Enter') checkPassword()"
+>
 
     <button onclick="checkPassword()">
       進入音樂庫
