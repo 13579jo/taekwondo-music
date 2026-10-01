@@ -477,9 +477,13 @@ function showMusicEditor() {
 }
 /* =========================
    選擇音樂後加入剪輯工作室
+   波形剪輯版
 ========================= */
 
-document.addEventListener("change", function(event) {
+let editorAudioContext = null;
+let editorSources = [];
+
+document.addEventListener("change", async function(event) {
 
   if (event.target.id !== "musicFileInput") {
     return;
@@ -491,9 +495,11 @@ document.addEventListener("change", function(event) {
     return;
   }
 
-  const editor = document.getElementById("musicEditor");
+  const editor =
+    document.getElementById("musicEditor");
 
-  let area = document.getElementById("loadedMusicArea");
+  let area =
+    document.getElementById("loadedMusicArea");
 
   if (!area) {
 
@@ -508,52 +514,700 @@ document.addEventListener("change", function(event) {
     editor
       .querySelector(".music-card")
       .appendChild(area);
+
+    /* 成品剪輯軌 */
+    const finalTrack =
+      document.createElement("div");
+
+    finalTrack.id = "finalTrack";
+
+    finalTrack.innerHTML = `
+      <div style="
+        margin-top:25px;
+        font-weight:bold;
+        color:white;
+      ">
+        🎬 成品剪輯軌
+      </div>
+
+      <div
+        id="finalTrackArea"
+        style="
+          min-height:90px;
+          margin-top:10px;
+          padding:12px;
+          border:2px dashed #744cff;
+          border-radius:14px;
+          background:#101018;
+          color:#888;
+        "
+      >
+        剪下來的音樂片段之後會放在這裡
+      </div>
+
+      <div style="
+        margin-top:10px;
+        color:#aaa;
+        font-size:14px;
+      ">
+        目標長度：01:34～01:35
+      </div>
+    `;
+
+    area.appendChild(finalTrack);
+
+    /* 音效軌 */
+    const effectTrack =
+      document.createElement("div");
+
+    effectTrack.id = "effectTrack";
+
+    effectTrack.innerHTML = `
+      <div style="
+        margin-top:25px;
+        font-weight:bold;
+        color:white;
+      ">
+        ⚡ 音效軌
+      </div>
+
+      <div
+        id="effectTrackArea"
+        style="
+          min-height:80px;
+          margin-top:10px;
+          padding:12px;
+          border:2px dashed #555;
+          border-radius:14px;
+          background:#101018;
+          color:#888;
+        "
+      >
+        重擊、雷電、刀劍、破風等音效之後會放在這裡
+      </div>
+    `;
+
+    area.appendChild(effectTrack);
   }
 
-  files.forEach(function(file) {
+  if (!editorAudioContext) {
 
-    const url = URL.createObjectURL(file);
+    editorAudioContext =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+  }
 
-    const musicBox = document.createElement("div");
+  for (const file of files) {
 
-    musicBox.style.cssText = `
-      background:#101018;
-      padding:15px;
-      margin-top:12px;
-      border-radius:14px;
-    `;
+    try {
 
-    const title = document.createElement("div");
+      const arrayBuffer =
+        await file.arrayBuffer();
 
-    title.textContent = "🎵 " + file.name;
+      const audioBuffer =
+        await editorAudioContext
+          .decodeAudioData(arrayBuffer);
 
-    title.style.cssText = `
-      color:white;
-      font-weight:bold;
-      margin-bottom:10px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    `;
+      createWaveformEditor(
+        file,
+        audioBuffer,
+        area
+      );
 
-    const audio = document.createElement("audio");
+    } catch (error) {
 
-    audio.controls = true;
-    audio.src = url;
-    audio.style.width = "100%";
+      console.error(error);
 
-    musicBox.appendChild(title);
-    musicBox.appendChild(audio);
-
-    area.appendChild(musicBox);
-
-  });
+      alert(
+        "這個音樂格式目前無法讀取：\n" +
+        file.name
+      );
+    }
+  }
 
   event.target.value = "";
-
 });
-    
 
+
+/* =========================
+   建立音樂波形
+========================= */
+
+function createWaveformEditor(
+  file,
+  audioBuffer,
+  area
+) {
+
+  const sourceIndex =
+    editorSources.length;
+
+  const source = {
+    file: file,
+    buffer: audioBuffer,
+    playhead: 0,
+    audioSource: null,
+    playing: false,
+    startedAt: 0,
+    animationId: null,
+    cuts: []
+  };
+
+  editorSources.push(source);
+
+  const musicBox =
+    document.createElement("div");
+
+  musicBox.style.cssText = `
+    background:#101018;
+    padding:15px;
+    margin-top:15px;
+    border-radius:14px;
+  `;
+
+  const title =
+    document.createElement("div");
+
+  title.textContent =
+    "🎵 原始音樂 " +
+    (sourceIndex + 1) +
+    "｜" +
+    file.name;
+
+  title.style.cssText = `
+    color:white;
+    font-weight:bold;
+    margin-bottom:12px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  `;
+
+  const canvas =
+    document.createElement("canvas");
+
+  canvas.width = 1000;
+  canvas.height = 180;
+
+  canvas.style.cssText = `
+    width:100%;
+    height:130px;
+    display:block;
+    background:#191925;
+    border-radius:10px;
+    touch-action:none;
+    cursor:pointer;
+  `;
+
+  source.canvas = canvas;
+
+  const controls =
+    document.createElement("div");
+
+  controls.style.cssText = `
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+  `;
+
+  const playButton =
+    document.createElement("button");
+
+  playButton.textContent = "▶ 播放";
+
+  playButton.style.cssText = `
+    border:0;
+    border-radius:10px;
+    padding:10px 14px;
+    background:#744cff;
+    color:white;
+    font-weight:bold;
+  `;
+
+  const cutButton =
+    document.createElement("button");
+
+  cutButton.textContent = "✂️ 剪一刀";
+
+  cutButton.style.cssText = `
+    border:0;
+    border-radius:10px;
+    padding:10px 14px;
+    background:#333342;
+    color:white;
+    font-weight:bold;
+  `;
+
+  const timeDisplay =
+    document.createElement("span");
+
+  timeDisplay.style.cssText = `
+    margin-left:auto;
+    color:#ddd;
+    font-size:14px;
+  `;
+
+  source.timeDisplay = timeDisplay;
+  source.playButton = playButton;
+
+  playButton.addEventListener(
+    "click",
+    function() {
+      toggleEditorSource(sourceIndex);
+    }
+  );
+
+  cutButton.addEventListener(
+    "click",
+    function() {
+      addEditorCut(sourceIndex);
+    }
+  );
+
+  canvas.addEventListener(
+    "pointerdown",
+    function(event) {
+
+      const rect =
+        canvas.getBoundingClientRect();
+
+      const x =
+        event.clientX - rect.left;
+
+      const ratio =
+        Math.max(
+          0,
+          Math.min(
+            1,
+            x / rect.width
+          )
+        );
+
+      stopEditorSource(sourceIndex);
+
+      source.playhead =
+        ratio * audioBuffer.duration;
+
+      drawEditorWaveform(sourceIndex);
+    }
+  );
+
+  controls.appendChild(playButton);
+  controls.appendChild(cutButton);
+  controls.appendChild(timeDisplay);
+
+  musicBox.appendChild(title);
+  musicBox.appendChild(canvas);
+  musicBox.appendChild(controls);
+
+  /* 放在成品軌前面 */
+  const finalTrack =
+    document.getElementById("finalTrack");
+
+  area.insertBefore(
+    musicBox,
+    finalTrack
+  );
+
+  drawEditorWaveform(sourceIndex);
+}
+
+
+/* =========================
+   畫波形＋播放線＋切割線
+========================= */
+
+function drawEditorWaveform(index) {
+
+  const source =
+    editorSources[index];
+
+  if (!source || !source.canvas) {
+    return;
+  }
+
+  const canvas = source.canvas;
+  const ctx = canvas.getContext("2d");
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+  ctx.fillStyle = "#191925";
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+  const data =
+    source.buffer
+      .getChannelData(0);
+
+  const step =
+    Math.ceil(
+      data.length / width
+    );
+
+  const middle =
+    height / 2;
+
+  ctx.strokeStyle = "#8d72ff";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+
+  for (
+    let x = 0;
+    x < width;
+    x++
+  ) {
+
+    let min = 1;
+    let max = -1;
+
+    const start =
+      x * step;
+
+    const end =
+      Math.min(
+        start + step,
+        data.length
+      );
+
+    for (
+      let i = start;
+      i < end;
+      i++
+    ) {
+
+      const value = data[i];
+
+      if (value < min) {
+        min = value;
+      }
+
+      if (value > max) {
+        max = value;
+      }
+    }
+
+    ctx.moveTo(
+      x,
+      middle + min * middle * 0.85
+    );
+
+    ctx.lineTo(
+      x,
+      middle + max * middle * 0.85
+    );
+  }
+
+  ctx.stroke();
+
+  /* 切割位置 */
+  ctx.strokeStyle = "#ff4f75";
+  ctx.lineWidth = 3;
+
+  source.cuts.forEach(
+    function(cutTime) {
+
+      const cutX =
+        (
+          cutTime /
+          source.buffer.duration
+        ) * width;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        cutX,
+        0
+      );
+
+      ctx.lineTo(
+        cutX,
+        height
+      );
+
+      ctx.stroke();
+    }
+  );
+
+  /* 白色播放位置線 */
+  const playX =
+    (
+      source.playhead /
+      source.buffer.duration
+    ) * width;
+
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 4;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    playX,
+    0
+  );
+
+  ctx.lineTo(
+    playX,
+    height
+  );
+
+  ctx.stroke();
+
+  source.timeDisplay.textContent =
+    formatEditorTime(source.playhead) +
+    " / " +
+    formatEditorTime(
+      source.buffer.duration
+    );
+}
+
+
+/* =========================
+   播放 / 暫停原始音樂
+========================= */
+
+function toggleEditorSource(index) {
+
+  const source =
+    editorSources[index];
+
+  if (source.playing) {
+
+    const elapsed =
+      editorAudioContext.currentTime -
+      source.startedAt;
+
+    source.playhead += elapsed;
+
+    if (
+      source.playhead >
+      source.buffer.duration
+    ) {
+      source.playhead = 0;
+    }
+
+    stopEditorSource(index);
+
+    return;
+  }
+
+  /* 先停止其他原始音樂 */
+  editorSources.forEach(
+    function(item, otherIndex) {
+
+      if (
+        otherIndex !== index &&
+        item.playing
+      ) {
+        stopEditorSource(otherIndex);
+      }
+    }
+  );
+
+  if (
+    source.playhead >=
+    source.buffer.duration
+  ) {
+    source.playhead = 0;
+  }
+
+  const node =
+    editorAudioContext
+      .createBufferSource();
+
+  node.buffer = source.buffer;
+
+  node.connect(
+    editorAudioContext.destination
+  );
+
+  node.start(
+    0,
+    source.playhead
+  );
+
+  source.audioSource = node;
+  source.playing = true;
+  source.startedAt =
+    editorAudioContext.currentTime;
+
+  source.playButton.textContent =
+    "⏸ 暫停";
+
+  const startPosition =
+    source.playhead;
+
+  function update() {
+
+    if (!source.playing) {
+      return;
+    }
+
+    const elapsed =
+      editorAudioContext.currentTime -
+      source.startedAt;
+
+    source.playhead =
+      startPosition + elapsed;
+
+    if (
+      source.playhead >=
+      source.buffer.duration
+    ) {
+
+      source.playhead =
+        source.buffer.duration;
+
+      source.playing = false;
+
+      source.playButton.textContent =
+        "▶ 播放";
+
+      drawEditorWaveform(index);
+
+      return;
+    }
+
+    drawEditorWaveform(index);
+
+    source.animationId =
+      requestAnimationFrame(update);
+  }
+
+  update();
+}
+
+
+/* =========================
+   停止原始音樂
+========================= */
+
+function stopEditorSource(index) {
+
+  const source =
+    editorSources[index];
+
+  if (!source) {
+    return;
+  }
+
+  if (source.audioSource) {
+
+    try {
+      source.audioSource.stop();
+    } catch (error) {
+    }
+
+    source.audioSource = null;
+  }
+
+  if (source.animationId) {
+
+    cancelAnimationFrame(
+      source.animationId
+    );
+
+    source.animationId = null;
+  }
+
+  source.playing = false;
+
+  if (source.playButton) {
+
+    source.playButton.textContent =
+      "▶ 播放";
+  }
+
+  drawEditorWaveform(index);
+}
+
+
+/* =========================
+   剪刀：目前位置切一刀
+========================= */
+
+function addEditorCut(index) {
+
+  const source =
+    editorSources[index];
+
+  if (!source) {
+    return;
+  }
+
+  const cutTime =
+    source.playhead;
+
+  if (
+    cutTime <= 0 ||
+    cutTime >=
+      source.buffer.duration
+  ) {
+    return;
+  }
+
+  const exists =
+    source.cuts.some(
+      function(time) {
+        return (
+          Math.abs(
+            time - cutTime
+          ) < 0.05
+        );
+      }
+    );
+
+  if (!exists) {
+
+    source.cuts.push(cutTime);
+
+    source.cuts.sort(
+      function(a, b) {
+        return a - b;
+      }
+    );
+  }
+
+  drawEditorWaveform(index);
+}
+
+
+/* =========================
+   剪輯時間格式
+========================= */
+
+function formatEditorTime(seconds) {
+
+  if (!isFinite(seconds)) {
+    return "0:00";
+  }
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  const secs =
+    Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, "0");
+
+  return minutes + ":" + secs;
+}
 
 
 
