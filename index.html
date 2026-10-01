@@ -2,16 +2,6 @@
 <html lang="zh-Hant">
 
 <head>
-
-  <!-- ==================================================
-       【開始】01－網頁基本設定
-
-       【作用】
-       1. 設定繁體中文
-       2. 設定手機與電腦顯示比例
-       3. 設定瀏覽器分頁名稱
-  ================================================== -->
-
   <meta charset="UTF-8">
 
   <meta
@@ -21,24 +11,7 @@
 
   <title>自由品勢音樂庫</title>
 
-  <!-- ==================================================
-       【結束】01－網頁基本設定
-  ================================================== -->
-
-
   <style>
-
-    /* ==================================================
-       【開始】02－全網站基本外觀
-
-       【作用】
-       設定：
-       1. 網站背景
-       2. 字體
-       3. 文字顏色
-       4. 基本尺寸
-    ================================================== */
-
     * {
       box-sizing: border-box;
     }
@@ -50,1163 +23,2151 @@
       color: white;
     }
 
-    /* ==================================================
-       【結束】02－全網站基本外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】03－網站標題外觀
-
-       【作用】
-       控制最上方：
-       「自由品勢音樂庫」
-       「自由品勢音樂線上試聽」
-    ================================================== */
-
     .header {
-      width: 100%;
       text-align: center;
-      padding: 42px 20px 32px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #101018,
-          #24104d
-        );
+      padding: 45px 20px 30px;
+      background: linear-gradient(135deg, #101018, #24104d);
     }
 
     .header h1 {
       margin: 0;
-      font-size: 36px;
-      font-weight: bold;
+      font-size: 38px;
     }
 
     .header p {
-      margin: 10px 0 0;
+      margin-top: 12px;
       color: #c9c9d8;
+      font-size: 17px;
+    }
+
+    .controls {
+      width: 90%;
+      max-width: 900px;
+      margin: 25px auto 10px;
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 10px;
+    }
+
+    .search-box,
+    .category-select {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: #1c1c27;
+      color: white;
       font-size: 16px;
     }
 
-    /* ==================================================
-       【結束】03－網站標題外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】04－音樂列表外觀
-
-       【作用】
-       控制所有歌曲卡片的寬度與位置
-    ================================================== */
-
-    .music-list {
-      width: 92%;
-      max-width: 850px;
-      margin: 30px auto 60px;
+    .tabs {
+      width: 90%;
+      max-width: 900px;
+      margin: 15px auto;
+      display: flex;
+      gap: 10px;
     }
 
-    /* ==================================================
-       【結束】04－音樂列表外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】05－歌曲卡片外觀
-
-       【作用】
-       控制單首歌曲：
-       1. 背景
-       2. 邊框
-       3. 圓角
-       4. 內部間距
-    ================================================== */
-
-    .music-card {
-      padding: 20px;
-      background: #15151e;
-      border: 1px solid #30303d;
-      border-radius: 18px;
+    .tab-button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: #242432;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
     }
 
-    .music-title {
-      margin: 0;
-      font-size: 21px;
+    .tab-button.active {
+      background: #744cff;
     }
 
-    .music-info {
-      margin-top: 8px;
-      color: #9999aa;
+    .stats {
+      width: 90%;
+      max-width: 900px;
+      margin: 15px auto 25px;
+      color: #b7b7c8;
       font-size: 14px;
     }
 
-    /* ==================================================
-       【結束】05－歌曲卡片外觀
-    ================================================== */
+    .music-list {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
+    .music-card {
+      background: #181821;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 0 25px rgba(120, 70, 255, 0.20);
+    }
 
+    .music-card h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 25px;
+    }
 
-    /* ==================================================
-       【開始】06－播放器整體外觀
+    .info {
+      color: #bdbdcc;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
 
-       【作用】
-       控制白色播放器：
-       1. 播放按鈕
-       2. 時間
-       3. 進度條
-       4. 音量
-    ================================================== */
+    .download-count {
+      color: #9898aa;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
 
-    .player {
+    /* =========================
+       自製播放器
+       ========================= */
+
+    .player-row {
+      width: 100%;
       display: flex;
       align-items: center;
-      gap: 10px;
-
-      width: 100%;
-      margin-top: 20px;
-      padding: 10px 12px;
-
-      background: white;
-      color: #222;
-
-      border-radius: 50px;
+      gap: 8px;
+      position: relative;
     }
 
-    /* ==================================================
-       【結束】06－播放器整體外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】07－播放／暫停按鈕外觀
-
-       【作用】
-       控制紫色圓形 ▶ 按鈕的外觀
-       這裡只控制外觀，不控制播放功能
-    ================================================== */
+    .custom-player {
+      flex: 1;
+      min-width: 0;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      border-radius: 28px;
+      background: #f2f2f2;
+      color: #222;
+    }
 
     .play-button {
-      width: 46px;
-      height: 46px;
-
-      flex-shrink: 0;
-
       border: none;
-      border-radius: 50%;
-
-      background: #6c45e8;
-      color: white;
-
-      font-size: 18px;
-
+      background: transparent;
+      color: #222;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      font-size: 21px;
       cursor: pointer;
+      flex-shrink: 0;
     }
-
-    /* ==================================================
-       【結束】07－播放／暫停按鈕外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】08－播放時間外觀
-
-       【作用】
-       顯示例如：
-       0:00 / 1:34
-    ================================================== */
 
     .time-display {
-      min-width: 90px;
-      text-align: center;
-      font-size: 12px;
+      color: #555;
+      font-size: 14px;
       white-space: nowrap;
+      min-width: 82px;
     }
 
-    /* ==================================================
-       【結束】08－播放時間外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】09－播放進度條外觀
-
-       【作用】
-       控制播放進度條的寬度
-    ================================================== */
-
-    .progress-bar {
+    .progress {
       flex: 1;
-      min-width: 50px;
+      min-width: 40px;
       cursor: pointer;
     }
 
-    /* ==================================================
-       【結束】09－播放進度條外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】10－音量外觀
-
-       【作用】
-       控制：
-       1. 🔊 音量圖示
-       2. 音量拉桿
-    ================================================== */
-
-    .volume-icon {
-      font-size: 18px;
+    .volume-button {
+      border: none;
+      background: transparent;
+      color: #222;
+      font-size: 20px;
+      cursor: pointer;
       flex-shrink: 0;
+    }
+
+    /* 愛心 */
+
+    .heart-button {
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: #292936;
+      color: #b7b7c8;
+      font-size: 24px;
       cursor: pointer;
-      user-select: none;
+      flex-shrink: 0;
     }
 
-    .volume-control {
-      width: 75px;
+    .heart-button.active {
+      color: #ff4f75;
+      background: #352b38;
+    }
+
+    /* 自訂三點 */
+
+    .menu-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .menu-button {
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: #292936;
+      color: white;
+      font-size: 25px;
       cursor: pointer;
     }
 
-    /* ==================================================
-       【結束】10－音量外觀
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】11－音樂載入狀態
-
-       【作用】
-       顯示 music01.mp3 是否成功讀取。
-
-       成功：
-       顯示「✓ 音樂已載入」
-
-       失敗：
-       顯示「⚠ music01.mp3 載入失敗」
-
-       這一區方便我們以後檢查問題。
-    ================================================== */
-
-    .music-status {
-      margin-top: 14px;
-      font-size: 13px;
-      color: #aaaabd;
-    }
-
-    .music-status.success {
-      color: #69db7c;
-    }
-
-    .music-status.error {
-      color: #ff6b6b;
-    }
-
-    /* ==================================================
-       【結束】11－音樂載入狀態
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】12－音樂檔測試播放器
-
-       【作用】
-       這是檢查 music01.mp3 用的播放器。
-
-       現在先顯示出來。
-
-       只要這個播放器可以播放，
-       就代表 music01.mp3 的檔案與路徑正常。
-
-       等確認全部正常後，
-       這個測試播放器可以再隱藏。
-    ================================================== */
-
-    .audio-test {
+    .song-menu {
       display: none;
-      width: 100%;
-      margin-top: 15px;
+      position: absolute;
+      right: 0;
+      top: 58px;
+      width: 190px;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.40);
+      z-index: 1000;
     }
 
-    /* ==================================================
-       【結束】12－音樂檔測試播放器
-    ================================================== */
+    .song-menu.show {
+      display: block;
+    }
 
+    .menu-item {
+      width: 100%;
+      padding: 15px 18px;
+      border: none;
+      background: white;
+      color: #222;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
+    .menu-item:hover {
+      background: #eeeeee;
+    }
 
-    /* ==================================================
-       【開始】13－手機版外觀
+    .menu-divider {
+      height: 1px;
+      background: #dddddd;
+    }
 
-       【作用】
-       手機螢幕小於 650px 時，
-       自動縮小播放器與文字
-    ================================================== */
+    .empty {
+      text-align: center;
+      color: #9999aa;
+      padding: 50px 20px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 35px 20px;
+      color: #777788;
+      font-size: 13px;
+    }
 
     @media (max-width: 650px) {
-
-      .header {
-        padding: 34px 15px 26px;
+      .controls {
+        grid-template-columns: 1fr;
       }
 
       .header h1 {
-        font-size: 29px;
-      }
-
-      .header p {
-        font-size: 14px;
-      }
-
-      .music-list {
-        width: 94%;
-        margin-top: 20px;
+        font-size: 31px;
       }
 
       .music-card {
-        padding: 16px;
+        padding: 18px;
       }
 
-      .player {
-        gap: 6px;
-        padding: 8px;
-      }
-
-      .play-button {
-        width: 42px;
-        height: 42px;
+      .custom-player {
+        gap: 7px;
+        padding: 0 10px;
       }
 
       .time-display {
-        min-width: 76px;
-        font-size: 11px;
+        min-width: 70px;
+        font-size: 12px;
       }
 
-      .volume-control {
-        width: 50px;
+      .heart-button,
+      .menu-button {
+        width: 46px;
+        height: 46px;
       }
-
     }
-
-    /* ==================================================
-       【結束】13－手機版外觀
-    ================================================== */
-
   </style>
-
 </head>
-
 
 <body>
 
-
-  <!-- ==================================================
-       【開始】14－網站標題
-
-       【作用】
-       顯示：
-       自由品勢音樂庫
-       自由品勢音樂線上試聽
-  ================================================== -->
-
-  <header class="header">
-
-    <h1>
-      自由品勢音樂庫
-    </h1>
+  <!-- =========================
+     01｜網站標題區
+     作用：顯示網站名稱與說明
+========================= -->
+<div class="header">
+    <h1>自由品勢音樂庫</h1>
 
     <p>
-      自由品勢音樂線上試聽
+      高品質剪輯・自由品勢專用・線上試聽・下載使用
     </p>
-
-  </header>
-
-  <!-- ==================================================
-       【結束】14－網站標題
-  ================================================== -->
-
-
-
-  <!-- ==================================================
-       【開始】15－音樂列表
-
-       【作用】
-       所有歌曲都放在這個區域。
-
-       以後：
-       music01
-       music02
-       music03
-       都放在這裡。
-  ================================================== -->
-
-  <main class="music-list">
-
-
-    <!-- ==================================================
-         【開始】16－第一首歌曲 music01
-
-         【作用】
-         管理第一首歌曲全部內容：
-
-         1. 歌曲名稱
-         2. 歌曲資料
-         3. MP3檔案
-         4. 測試播放器
-         5. 正式播放器
-    ================================================== -->
-
-    <section class="music-card">
-
-
-      <!-- ==================================================
-           【開始】16-01－歌曲名稱
-
-           【作用】
-           顯示第一首歌曲名稱
-      ================================================== -->
-
-      <h2 class="music-title">
-        自由品勢音樂 01
-      </h2>
-
-      <!-- ==================================================
-           【結束】16-01－歌曲名稱
-      ================================================== -->
-
-
-
-      <!-- ==================================================
-           【開始】16-02－歌曲資料
-
-           【作用】
-           顯示歌曲類型、用途與秒數
-      ================================================== -->
-
-      <div class="music-info">
-        純音樂｜自由品勢｜94秒
-      </div>
-
-      <!-- ==================================================
-           【結束】16-02－歌曲資料
-      ================================================== -->
-
-
-
-      <!-- ==================================================
-           【開始】16-03－正式音樂檔案
-
-           【作用】
-           指定第一首歌曲真正使用的 MP3。
-
-           現在指定：
-           music01.mp3
-
-           GitHub 必須是：
-
-           taekwondo-music
-           ├── index.html
-           └── music01.mp3
-
-           兩個檔案在同一層。
-
-           【以後如果換歌】
-           修改：
-           src="./music01.mp3"
-      ================================================== -->
-
-      <audio
-        id="music01"
-        preload="metadata"
-      >
-
-        <source
-          src="./music01.mp3"
-          type="audio/mpeg"
-        >
-
-        您的瀏覽器不支援音樂播放。
-
-      </audio>
-
-      <!-- ==================================================
-           【結束】16-03－正式音樂檔案
-      ================================================== -->
-
-
-
-      <!-- ==================================================
-           【開始】16-04－音樂載入狀態
-
-           【作用】
-           告訴我們 MP3 有沒有成功載入。
-
-           一開始：
-           「正在讀取 music01.mp3...」
-
-           成功：
-           「✓ 音樂已載入」
-
-           失敗：
-           「⚠ music01.mp3 載入失敗」
-      ================================================== -->
-
-      <div
-        id="musicStatus"
-        class="music-status"
-      >
-        正在讀取 music01.mp3...
-      </div>
-
-      <!-- ==================================================
-           【結束】16-04－音樂載入狀態
-      ================================================== -->
-
-
-
-      <!-- ==================================================
-           【開始】16-05－音樂檔測試
-
-           【作用】
-           直接使用瀏覽器自己的播放器
-           測試 music01.mp3。
-
-           目前故意顯示。
-
-           如果這裡能播放，
-           代表 MP3 檔案完全正常。
-
-           等全部測試完成，
-           我們再把這個測試播放器隱藏。
-      ================================================== -->
-
-      <audio
-        class="audio-test"
-        controls
-        preload="metadata"
-      >
-
-        <source
-          src="./music01.mp3"
-          type="audio/mpeg"
-        >
-
-        您的瀏覽器無法播放此音樂。
-
-      </audio>
-
-      <!-- ==================================================
-           【結束】16-05－音樂檔測試
-      ================================================== -->
-
-
-
-      <!-- ==================================================
-           【開始】16-06－正式播放器
-
-           【作用】
-           正式播放器包含：
-
-           ▶ 播放
-           ⏸ 暫停
-           播放時間
-           進度條
-           🔊 音量
-      ================================================== -->
-
-      <div class="player">
-
-
-        <!-- ==================================================
-             【開始】16-06-01－播放／暫停按鈕
-
-             【作用】
-             ▶ = 播放
-             ⏸ = 暫停
-        ================================================== -->
-
-        <button
-          id="playButton"
-          class="play-button"
-          type="button"
-          aria-label="播放或暫停"
-        >
-          ▶
-        </button>
-
-        <!-- ==================================================
-             【結束】16-06-01－播放／暫停按鈕
-        ================================================== -->
-
-
-
-        <!-- ==================================================
-             【開始】16-06-02－播放時間
-
-             【作用】
-             顯示：
-             目前時間 / 總時間
-
-             例如：
-             0:25 / 1:34
-        ================================================== -->
-
-        <div
-          id="timeDisplay"
-          class="time-display"
-        >
-          0:00 / 0:00
-        </div>
-
-        <!-- ==================================================
-             【結束】16-06-02－播放時間
-        ================================================== -->
-
-
-
-        <!-- ==================================================
-             【開始】16-06-03－播放進度條
-
-             【作用】
-             1. 顯示播放位置
-             2. 可以左右拖動
-             3. 可以跳到指定時間
-        ================================================== -->
-
-        <input
-          id="progressBar"
-          class="progress-bar"
-          type="range"
-          min="0"
-          max="100"
-          value="0"
-          step="0.1"
-          aria-label="播放進度"
-        >
-
-        <!-- ==================================================
-             【結束】16-06-03－播放進度條
-        ================================================== -->
-
-
-
-        <!-- ==================================================
-             【開始】16-06-04－音量圖示
-
-             【作用】
-             顯示目前音量狀態：
-
-             🔊 有聲音
-             🔉 小聲
-             🔇 靜音
-
-             點一下可以靜音／恢復
-        ================================================== -->
-
-        <span
-          id="volumeIcon"
-          class="volume-icon"
-          role="button"
-          tabindex="0"
-          aria-label="靜音或恢復聲音"
-        >
-          🔊
-        </span>
-
-        <!-- ==================================================
-             【結束】16-06-04－音量圖示
-        ================================================== -->
-
-
-
-        <!-- ==================================================
-             【開始】16-06-05－音量拉桿
-
-             【作用】
-             左右拉動調整音量。
-
-             0 = 靜音
-             1 = 最大聲
-        ================================================== -->
-
-        <input
-          id="volumeControl"
-          class="volume-control"
-          type="range"
-          min="0"
-          max="1"
-          value="1"
-          step="0.01"
-          aria-label="音量"
-        >
-
-        <!-- ==================================================
-             【結束】16-06-05－音量拉桿
-        ================================================== -->
-
-
-      </div>
-
-      <!-- ==================================================
-           【結束】16-06－正式播放器
-      ================================================== -->
-
-
-    </section>
-
-    <!-- ==================================================
-         【結束】16－第一首歌曲 music01
-    ================================================== -->
-
-
-  </main>
-
-  <!-- ==================================================
-       【結束】15－音樂列表
-  ================================================== -->
-
+  </div>
+
+
+  <!-- =========================
+     02｜搜尋與分類
+     作用：搜尋歌曲、切換分類、進入音樂剪輯
+========================= -->
+
+  <div class="controls">
+
+    <input
+      id="searchInput"
+      class="search-box"
+      type="text"
+      placeholder="🔎 搜尋音樂..."
+      oninput="renderSongs()"
+    >
+
+    <select
+      id="categorySelect"
+      class="category-select"
+      onchange="handleCategoryChange()"
+    >
+      <option value="全部">全部分類</option>
+      <option value="震撼">震撼</option>
+      <option value="東方">東方武術</option>
+      <option value="電子">電子</option>
+      <option value="優雅">優雅</option>
+      <option value="剪輯">✂️ 音樂剪輯</option>
+    </select>
+
+  </div>
+
+
+  <!-- =========================
+     03｜全部音樂 / 我的最愛
+     作用：切換全部歌曲與收藏歌曲
+========================= -->
+
+  <div class="tabs">
+
+    <button
+      id="allTab"
+      class="tab-button active"
+      onclick="showAllSongs()"
+    >
+      🎵 全部音樂
+    </button>
+
+    <button
+      id="favoriteTab"
+      class="tab-button"
+      onclick="showFavorites()"
+    >
+      ♥ 我的最愛
+    </button>
+
+  </div>
+
+
+  <div id="stats" class="stats"></div>
+
+  <div id="musicList" class="music-list"></div>
+
+  <div class="footer">
+    自由品勢音樂庫
+  </div>
 
 
   <script>
 
+/* ============================================================
+   【功能 01】影片式多軌音樂剪輯工作室
+   作用：中央固定播放線、橫向時間軸、真正分割、刪除、拖動片段、多軌音樂/音效。
+============================================================ */
+let editorAudioContext=null, editorSources=[], timelineClips=[], selectedClipId=null;
+let trackAudioStates={}; // 每條音軌只保留 mute：false=有聲、true=靜音
+let editorPlaying=false, editorNodes=[], editorStartedAt=0, editorAnimationId=null, editorPlayhead=0;
+let historyStack=[], redoStack=[], pixelsPerSecond=10, draggingTimeline=false, dragStartX=0, dragStartTime=0;
+const TRACK_HEIGHT=82, RULER_HEIGHT=34;
+const TRACK_LABEL_WIDTH=window.innerWidth<650?72:96;
+let fitDuration=95;
 
-    /* ==================================================
-       【開始】17－播放器元件連接
+function setEditorOnlyUI(isEditor){
+  const search=document.getElementById('searchInput');
+  const tabs=document.querySelector('.tabs');
+  if(search) search.style.display=isEditor?'none':'';
+  if(tabs) tabs.style.display=isEditor?'none':'';
+}
+function handleCategoryChange(){
+  const category=document.getElementById('categorySelect').value;
+  if(category==='剪輯'){
+    setEditorOnlyUI(true);
+    showMusicEditor();
+  } else {
+    setEditorOnlyUI(false);
+    const editor=document.getElementById('musicEditor'); if(editor) editor.style.display='none';
+    document.getElementById('musicList').style.display=''; document.getElementById('stats').style.display=''; renderSongs();
+  }
+}
+function showMusicEditor(){
+  document.getElementById('musicList').style.display='none'; document.getElementById('stats').style.display='none';
+  let editor=document.getElementById('musicEditor');
+  if(!editor){
+    editor=document.createElement('div'); editor.id='musicEditor'; editor.className='music-list';
+    editor.innerHTML=`<div class="music-card editor-card">
+      <h2 style="text-align:center;margin-bottom:6px">✂️ 音樂剪輯工作室</h2>
+      <div class="info" style="text-align:center">整首音樂滿版顯示｜點時間位置移動播放線｜選取片段後按「分割」</div>
+      <input id="musicFileInput" type="file" accept="audio/*" multiple hidden>
+      <input id="effectFileInput" type="file" accept="audio/*" multiple hidden>
+      <div class="editor-topbar">
+        <button class="ed-btn primary" onclick="document.getElementById('musicFileInput').click()">＋ 音樂</button>
+        <button class="ed-btn" onclick="document.getElementById('effectFileInput').click()">⚡ 音效</button>
+        <button class="ed-btn" onclick="splitSelectedClip()">✂️ 分割</button>
+        <button class="ed-btn" onclick="deleteSelectedClip()">🗑 刪除</button>
+        <button class="ed-btn" onclick="undoEditor()">↶ 復原</button>
+        <button class="ed-btn" onclick="redoEditor()">↷ 重做</button>
+        <button class="ed-btn" onclick="fitTimeline()">↔ 滿版</button>
+        <button class="ed-btn primary" onclick="exportFinishedSong()">✅ 剪輯完成</button>
+        <button class="ed-btn" onclick="document.getElementById('projectFileInput').click()">📂 開啟工作包</button>
+        <input id="projectFileInput" type="file" accept=".zip,application/zip" style="display:none" onchange="openWorkPackage(this.files[0]);this.value=''">
+      </div>
+      <div class="transport">
+        <button id="timelinePlayBtn" class="round-play" onclick="toggleTimelinePlay()">▶</button>
+        <div id="editorTimeText" class="big-time">00:00.0 / 00:00.0</div>
+      </div>
+      <div id="timelineViewport" class="timeline-viewport">
+        <div id="timelineStage" class="timeline-stage">
+          <div id="timeRuler" class="time-ruler"></div>
+          <div id="tracksArea" class="tracks-area"></div>
+        </div>
+        <div class="fixed-playhead"><div class="playhead-cap"></div></div>
+      </div>
+      <div id="timelineStatus" class="timeline-status">目標長度：01:34～01:35 ｜目前：00:00.0</div>
 
-       【作用】
-       讓程式找到：
+      <div id="finishedSongArea" class="finished-song-area" style="display:none">
+        <div class="finished-song-title">🎵 剪輯完成</div>
+        <div class="finished-song-note">先試聽完整成品，確認沒問題後再下載工作包。</div>
+        <audio id="finishedSongPlayer" preload="metadata"></audio>
+        <div class="finished-custom-player">
+          <button id="finishedPlayBtn" type="button" onclick="toggleFinishedPlay()">▶</button>
+          <span id="finishedCurrentTime">00:00</span>
+          <input id="finishedSeek" type="range" min="0" max="1000" value="0" oninput="seekFinishedSong(this.value)">
+          <span id="finishedDuration">00:00</span>
+          <span class="finished-volume-icon">🔊</span>
+          <input id="finishedVolume" type="range" min="0" max="1" step="0.05" value="1" oninput="setFinishedVolume(this.value)">
+        </div>
+        <button id="finishedSongDownload" type="button" class="finished-download" onclick="downloadWorkPackage()">⬇️ 下載完整版／工作包</button>
+      </div>
+    </div>`;
+    document.getElementById('musicList').insertAdjacentElement('afterend',editor);
+    installEditorStyles(); installTimelineGestures();
+  }
+  editor.style.display=''; renderTimeline();
+}
+function installEditorStyles(){ if(document.getElementById('editorStyles'))return; const s=document.createElement('style'); s.id='editorStyles'; s.textContent=`
+.editor-card{padding:16px!important;overflow:hidden}.editor-topbar{display:flex;flex-wrap:nowrap;gap:7px;overflow-x:auto;overflow-y:hidden;padding:8px 0 12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.editor-topbar .ed-btn{flex:0 0 auto}.ed-btn{border:0;border-radius:9px;background:#30303d;color:#fff;padding:10px 13px;white-space:nowrap;font-weight:700}.ed-btn.primary{background:#744cff}.transport{display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 0 13px}.round-play{width:46px;height:46px;border-radius:50%;border:0;background:#fff;color:#111;font-size:20px}.big-time{font-variant-numeric:tabular-nums;font-weight:800;font-size:17px}.timeline-viewport{height:390px;position:relative;overflow:hidden;background:#09090e;border-radius:12px;border:1px solid #292936;touch-action:none;user-select:none}.timeline-stage{position:absolute;inset:0;height:100%;width:100%}.time-ruler{position:absolute;top:0;left:0;right:0;height:34px;border-bottom:1px solid #343440;background:#111118}.tracks-area{position:absolute;top:34px;left:0;right:0}.track-row{position:absolute;left:0;height:76px;border-bottom:1px solid #262632}.track-label{position:absolute;left:0;z-index:8;width:${TRACK_LABEL_WIDTH}px;height:100%;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:6px;color:#aaa;background:linear-gradient(90deg,#0d0d13 88%,transparent);font-size:11px}.track-name{white-space:nowrap}.track-audio-buttons{display:flex;gap:4px}.track-audio-btn{border:1px solid #444;border-radius:6px;background:#24242e;color:#fff;padding:3px 5px;font-size:10px;line-height:1.2}.track-audio-btn.active{background:#744cff;border-color:#9b83ff}.clip{position:absolute;top:7px;height:62px;border:2px solid #6d5ce7;border-radius:7px;background:#29204a;overflow:hidden;touch-action:none}.clip.selected{border-color:#fff;box-shadow:0 0 0 1px #fff}.clip.effect{background:#49341f;border-color:#ffb020}.clip-title{height:20px;padding:3px 7px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clip canvas{display:block;width:100%;height:38px}.trim-handle{position:absolute;top:0;bottom:0;width:14px;z-index:15;display:none;cursor:ew-resize;touch-action:none;background:rgba(255,255,255,.16)}.clip.selected .trim-handle{display:block}.trim-handle.left{left:0;border-left:4px solid #fff}.trim-handle.right{right:0;border-right:4px solid #fff}.trim-handle:before{content:"";position:absolute;top:20px;width:3px;height:20px;border-radius:3px;background:#fff}.trim-handle.left:before{left:4px}.trim-handle.right:before{right:4px}.trim-time{position:fixed;z-index:99999;display:none;padding:7px 10px;border-radius:8px;background:#fff;color:#111;font-weight:800;font-size:14px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.45)}.track-audio-btn.muted{background:#d60000!important;border:2px solid #ff5a5a!important;color:#fff!important;font-size:12px!important;font-weight:900!important;min-width:48px;min-height:30px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,0,0,.18)}.fixed-playhead{position:absolute;top:0;bottom:0;left:${TRACK_LABEL_WIDTH}px;width:2px;background:#fff;z-index:30;pointer-events:none;box-shadow:0 0 4px #000}.playhead-cap{position:absolute;top:0;left:-6px;width:14px;height:14px;background:#fff;border-radius:2px 2px 8px 8px}.timeline-status{text-align:center;color:#aaa;font-size:13px;padding:10px}.bottom-tools{display:flex;justify-content:space-around;gap:5px;border-top:1px solid #30303b;padding-top:10px}.tool-btn{flex:1;min-width:58px;border:0;background:transparent;color:#fff;font-size:21px;padding:6px 2px}.tool-btn span{display:block;font-size:11px;margin-top:4px}.editor-help{color:#8f8fa2;font-size:12px;text-align:center;margin-top:10px;line-height:1.6}.finished-song-area{margin-top:14px;padding:16px;border:1px solid #383848;border-radius:12px;background:#15151d;text-align:center}.finished-song-title{font-size:20px;font-weight:900;margin-bottom:5px}.finished-song-note{font-size:12px;color:#aaa;margin-bottom:12px}.finished-song-area audio{display:block;width:100%;margin:0 auto 12px}.finished-download{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:10px;background:#744cff;color:#fff;text-decoration:none;font-weight:900}.finished-download:hover{filter:brightness(1.08)}.finished-custom-player{display:flex;align-items:center;gap:8px;width:100%;margin:0 auto 12px;padding:10px;border-radius:10px;background:#20202a}.finished-custom-player button{width:38px;height:38px;flex:0 0 38px;border:0;border-radius:50%;background:#fff;color:#111;font-size:16px;font-weight:900}.finished-custom-player span{font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}.finished-custom-player #finishedSeek{flex:1;min-width:60px}.finished-custom-player #finishedVolume{width:78px}.finished-download{border:0;cursor:pointer}@media(max-width:650px){.finished-volume-icon,#finishedVolume{display:none}}.tick{position:absolute;top:0;height:100%;border-left:1px solid #4a4a55;color:#aaa;font-size:10px;padding-left:3px}.tick.minor{height:10px;color:transparent;border-color:#30303a}.empty-track{position:absolute;left:100px;top:20px;color:#666;font-size:13px}@media(max-width:650px){.music-list{width:100%}.editor-card{border-radius:0!important;padding:10px!important}.timeline-viewport{height:360px}.ed-btn{padding:9px 11px}.big-time{font-size:15px}.tool-btn{font-size:19px}}
+`; document.head.appendChild(s); }
+function snapshot(){ historyStack.push(JSON.stringify(timelineClips)); if(historyStack.length>40)historyStack.shift(); redoStack=[]; }
+function undoEditor(){ if(!historyStack.length)return; stopTimeline(); redoStack.push(JSON.stringify(timelineClips)); timelineClips=JSON.parse(historyStack.pop()); selectedClipId=null; renderTimeline(); }
+function redoEditor(){ if(!redoStack.length)return; stopTimeline(); historyStack.push(JSON.stringify(timelineClips)); timelineClips=JSON.parse(redoStack.pop()); selectedClipId=null; renderTimeline(); }
 
-       1. music01.mp3
-       2. 播放按鈕
-       3. 時間
-       4. 進度條
-       5. 音量圖示
-       6. 音量拉桿
-       7. 音樂載入狀態
-    ================================================== */
+document.addEventListener('change',async e=>{
+  if(!['musicFileInput','effectFileInput'].includes(e.target.id))return;
+  const isEffect=e.target.id==='effectFileInput';
+  const files=[...(e.target.files||[])];
+  if(!files.length)return;
+  if(!editorAudioContext)editorAudioContext=new(window.AudioContext||window.webkitAudioContext)();
+  snapshot();
+  for(const file of files){
+    try{
+      const buffer=await editorAudioContext.decodeAudioData(await file.arrayBuffer());
+      const sourceIndex=editorSources.length;
+      editorSources.push({file,buffer,isEffect});
+      // 每一首新音樂固定建立自己的獨立音軌；音效也建立獨立音軌。
+      const track=nextFreeTrack();
+      // 新加入的完整歌曲從 0:00 顯示，整首直接看得到，不塞到上一首歌後面。
+      timelineClips.push(newClip(sourceIndex,0,buffer.duration,0,track,isEffect));
+    }catch(err){
+      console.error(err);
+      alert('無法讀取：'+file.name+'\n建議使用 MP3、WAV 或 M4A。');
+    }
+  }
+  e.target.value='';
+  editorPlayhead=0;
+  renderTimeline();
+});
+function nextFreeTrack(){
+  const used=new Set(timelineClips.map(c=>Number(c.track)||0));
+  let t=0; while(used.has(t))t++; return t;
+}
+function newClip(sourceIndex,start,end,timelineStart,track,isEffect=false){return{id:'clip_'+Date.now()+'_'+Math.random().toString(36).slice(2),sourceIndex,start,end,timelineStart,track,isEffect};}
+function clipDuration(c){return Math.max(0,c.end-c.start)} function clipEnd(c){return c.timelineStart+clipDuration(c)}
+function getTrackAudioState(track){if(!trackAudioStates[track])trackAudioStates[track]={mute:false};return trackAudioStates[track];}
+function updateTrackMuteButton(track){
+  const btn = document.getElementById('trackMuteBtn_' + track);
+  if (!btn) return;
 
-    const audio =
-      document.getElementById("music01");
+  const state = getTrackAudioState(track);
+  const muted = !!state.mute;
 
-    const playButton =
-      document.getElementById("playButton");
+  // 完整狀態文字 + 直接 inline style，不依賴 emoji 顏色或外部 CSS。
+  btn.innerHTML = muted
+    ? '<span aria-hidden="true">🔇</span> <span>靜音</span>'
+    : '<span aria-hidden="true">🔊</span> <span>有聲</span>';
 
-    const timeDisplay =
-      document.getElementById("timeDisplay");
+  btn.style.cssText = muted
+    ? 'display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:78px;height:34px;padding:0 9px;border-radius:8px;border:2px solid #ff7777;background:#d60000;color:#fff;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 0 0 2px rgba(214,0,0,.22);'
+    : 'display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:78px;height:34px;padding:0 9px;border-radius:8px;border:1px solid #4b4b59;background:#24242e;color:#fff;font-weight:800;font-size:13px;cursor:pointer;box-shadow:none;';
 
-    const progressBar =
-      document.getElementById("progressBar");
+  btn.title = muted ? '此音軌已靜音，按一下恢復聲音' : '此音軌目前有聲，按一下靜音';
+  btn.setAttribute('aria-label', btn.title);
+  btn.setAttribute('aria-pressed', muted ? 'true' : 'false');
+  btn.dataset.muted = muted ? '1' : '0';
+}
 
-    const volumeIcon =
-      document.getElementById("volumeIcon");
+function toggleTrackMute(track){
+  const state = getTrackAudioState(track);
+  state.mute = !state.mute;
 
-    const volumeControl =
-      document.getElementById("volumeControl");
+  // 先立即改目前按鈕，確保使用者點下去馬上看到狀態。
+  updateTrackMuteButton(track);
 
-    const musicStatus =
-      document.getElementById("musicStatus");
+  // 播放中切換時，重新排程聲音但保留目前時間。
+  if (editorPlaying){
+    const keepTime = editorPlayhead;
+    stopTimeline();
+    editorPlayhead = keepTime;
+    toggleTimelinePlay();
+    // 播放函式可能造成畫面更新，再強制同步一次。
+    requestAnimationFrame(() => updateTrackMuteButton(track));
+  }
+}
+function isTrackAudible(track){return !getTrackAudioState(track).mute;}
+function totalDuration(){return timelineClips.reduce((m,c)=>Math.max(m,clipEnd(c)),0)}
+function maxTrack(){return timelineClips.reduce((m,c)=>Math.max(m,c.track||0),0)} function maxMusicTrack(){return timelineClips.filter(c=>!c.isEffect).reduce((m,c)=>Math.max(m,c.track||0),-1)}
+function splitSelectedClip(){const i=timelineClips.findIndex(c=>c.id===selectedClipId);if(i<0)return alert('請先點一下要分割的音樂片段。');const c=timelineClips[i],local=editorPlayhead-c.timelineStart;if(local<=.04||local>=clipDuration(c)-.04)return alert('先把要剪的位置移到中央白線，再按「分割」。');snapshot();const cut=c.start+local;const left=newClip(c.sourceIndex,c.start,cut,c.timelineStart,c.track,c.isEffect);const right=newClip(c.sourceIndex,cut,c.end,editorPlayhead,c.track,c.isEffect);timelineClips.splice(i,1,left,right);selectedClipId=right.id;stopTimeline();renderTimeline();}
+function deleteSelectedClip(){const i=timelineClips.findIndex(c=>c.id===selectedClipId);if(i<0)return alert('請先選擇片段。');snapshot();timelineClips.splice(i,1);selectedClipId=null;stopTimeline();renderTimeline();}
+function duplicateSelectedClip(){const c=timelineClips.find(c=>c.id===selectedClipId);if(!c)return alert('請先選擇片段。');snapshot();const n=newClip(c.sourceIndex,c.start,c.end,clipEnd(c)+.15,c.track,c.isEffect);timelineClips.push(n);selectedClipId=n.id;renderTimeline();}
+function moveSelectedToPlayhead(){const c=timelineClips.find(c=>c.id===selectedClipId);if(!c)return alert('請先選擇片段。');snapshot();c.timelineStart=Math.max(0,editorPlayhead);renderTimeline();}
+function getFitDuration(){
+  const sourceMax=editorSources.reduce((m,s)=>Math.max(m,s.buffer?.duration||0),0);
+  return Math.max(1,sourceMax,totalDuration(),95);
+}
+function fitTimeline(){editorPlayhead=Math.min(editorPlayhead,getFitDuration());renderTimeline();}
+function renderTimeline(){
+  const stage=document.getElementById('timelineStage'),ruler=document.getElementById('timeRuler'),area=document.getElementById('tracksArea'),viewport=document.getElementById('timelineViewport');
+  if(!stage||!ruler||!area||!viewport)return;
+  fitDuration=getFitDuration();
+  const usable=Math.max(180,viewport.clientWidth-TRACK_LABEL_WIDTH-8);
+  pixelsPerSecond=usable/fitDuration;
+  const width=viewport.clientWidth;
+  const tracks=Math.max(4,maxTrack()+1);
+  stage.style.width=width+'px'; ruler.style.width=width+'px'; area.style.width=width+'px'; area.style.height=tracks*TRACK_HEIGHT+'px';
+  ruler.innerHTML='';
+  // 依歌曲長度自動選擇清楚的秒數間隔，整條 0:00～結尾都在同一畫面。
+  const majorStep=fitDuration<=60?5:fitDuration<=120?10:fitDuration<=240?20:30;
+  for(let t=0;t<=fitDuration+.001;t+=majorStep){
+    const x=TRACK_LABEL_WIDTH+t*pixelsPerSecond;
+    const tick=document.createElement('div');tick.className='tick';tick.style.left=x+'px';tick.textContent=formatRuler(t);ruler.appendChild(tick);
+  }
+  if(fitDuration%majorStep!==0){const tick=document.createElement('div');tick.className='tick';tick.style.left=(TRACK_LABEL_WIDTH+fitDuration*pixelsPerSecond)+'px';tick.textContent=formatRuler(fitDuration);ruler.appendChild(tick)}
+  area.innerHTML='';
+  for(let tr=0;tr<tracks;tr++){
+    const row=document.createElement('div');row.className='track-row';row.style.top=(tr*TRACK_HEIGHT)+'px';row.style.width=width+'px';
+    const hasEffect=timelineClips.some(c=>c.track===tr&&c.isEffect);
+    const state=getTrackAudioState(tr);
+    row.innerHTML=`<div class="track-label"><div class="track-name">${hasEffect?'⚡ 音效 '+(tr+1):'🎵 音軌 '+(tr+1)}</div><div class="track-audio-buttons"><button id="trackMuteBtn_${tr}" type="button" onclick="event.stopPropagation();toggleTrackMute(${tr})">🔊 有聲</button></div></div>`; area.appendChild(row);
+    // 每次重畫時間軸，都依 track.mute 重新套用正確外觀，靜音提示不會被洗掉。
+    updateTrackMuteButton(tr);
+  }
+  if(!timelineClips.length){const e=document.createElement('div');e.className='empty-track';e.style.left=(TRACK_LABEL_WIDTH+10)+'px';e.textContent='按「＋ 音樂」加入第一首音樂';area.appendChild(e)}
+  timelineClips.forEach(c=>{
+    const src=editorSources[c.sourceIndex];if(!src)return;
+    const el=document.createElement('div');el.className='clip '+(c.id===selectedClipId?'selected ':'')+(c.isEffect?'effect':'');el.dataset.id=c.id;
+    el.style.left=(TRACK_LABEL_WIDTH+c.timelineStart*pixelsPerSecond)+'px';el.style.top=(c.track*TRACK_HEIGHT+7)+'px';el.style.width=Math.max(8,clipDuration(c)*pixelsPerSecond)+'px';
+    el.innerHTML=`<div class="clip-title">${escapeHtml(src.file.name)}</div><canvas width="800" height="70"></canvas><div class="trim-handle left" title="拖曳調整片段開頭"></div><div class="trim-handle right" title="拖曳調整片段結尾"></div>`;area.appendChild(el);
+    drawClipWave(el.querySelector('canvas'),src.buffer,c.start,c.end,c.isEffect?'#ffc25b':'#9c8cff');bindClipDrag(el,c);bindTrimHandles(el,c);
+  });
+  updateEditorTransform();updateEditorUI();
+}
+function bindClipDrag(el,c){let sx=0,st=0,moved=false;el.addEventListener('pointerdown',e=>{if(e.target.closest('.trim-handle'))return;e.stopPropagation();selectedClipId=c.id;sx=e.clientX;st=c.timelineStart;moved=false;el.setPointerCapture(e.pointerId);renderSelectionOnly();});el.addEventListener('pointermove',e=>{if(!el.hasPointerCapture(e.pointerId))return;const dx=e.clientX-sx;if(Math.abs(dx)>4)moved=true;c.timelineStart=Math.max(0,st+dx/pixelsPerSecond);el.style.left=(TRACK_LABEL_WIDTH+c.timelineStart*pixelsPerSecond)+'px';});el.addEventListener('pointerup',e=>{if(moved){historyStack.push(JSON.stringify(timelineClips.map(x=>x.id===c.id?{...x,timelineStart:st}:x)));redoStack=[];}try{el.releasePointerCapture(e.pointerId)}catch(_){} updateEditorUI();});}
+function getTrimTimeBadge(){let b=document.getElementById('trimTimeBadge');if(!b){b=document.createElement('div');b.id='trimTimeBadge';b.className='trim-time';document.body.appendChild(b)}return b;}
+function bindTrimHandles(el,c){
+  const left=el.querySelector('.trim-handle.left'),right=el.querySelector('.trim-handle.right');
+  if(!left||!right)return;
+  const bind=(handle,side)=>{
+    let sx=0,original=null,changed=false;
+    handle.addEventListener('pointerdown',e=>{
+      e.preventDefault();e.stopPropagation();stopTimeline();selectedClipId=c.id;renderSelectionOnly();
+      sx=e.clientX;original={start:c.start,end:c.end,timelineStart:c.timelineStart};changed=false;
+      handle.setPointerCapture(e.pointerId);
+      const badge=getTrimTimeBadge();badge.style.display='block';badge.style.left=(e.clientX+12)+'px';badge.style.top=(e.clientY-38)+'px';badge.textContent=side==='left'?formatPrecise(c.start):formatPrecise(c.end);
+    });
+    handle.addEventListener('pointermove',e=>{
+      if(!handle.hasPointerCapture(e.pointerId)||!original)return;
+      const src=editorSources[c.sourceIndex];if(!src)return;
+      const delta=(e.clientX-sx)/pixelsPerSecond;
+      if(side==='left'){
+        // 左邊往外可把原始音樂拉回來；往內可縮短。右端位置保持不動。
+        const maxStart=original.end-0.05;
+        let newStart=Math.max(0,Math.min(maxStart,original.start+delta));
+        let sourceDelta=newStart-original.start;
+        let newTimelineStart=Math.max(0,original.timelineStart+sourceDelta);
+        // 若碰到時間軸 0 秒，依實際可移動距離重新計算來源起點。
+        if(newTimelineStart===0 && original.timelineStart+sourceDelta<0){sourceDelta=-original.timelineStart;newStart=Math.max(0,original.start+sourceDelta);}
+        c.start=newStart;c.timelineStart=newTimelineStart;
+      }else{
+        // 右邊可一路拉回到原始檔案的結尾，也可往內縮短。
+        c.end=Math.max(original.start+0.05,Math.min(src.buffer.duration,original.end+delta));
+      }
+      changed=true;
+      const badge=getTrimTimeBadge();badge.style.display='block';badge.style.left=(e.clientX+12)+'px';badge.style.top=(e.clientY-38)+'px';badge.textContent=side==='left'?formatPrecise(c.start):formatPrecise(c.end);
+      const newLeft=TRACK_LABEL_WIDTH+c.timelineStart*pixelsPerSecond,newWidth=Math.max(8,clipDuration(c)*pixelsPerSecond);
+      el.style.left=newLeft+'px';el.style.width=newWidth+'px';drawClipWave(el.querySelector('canvas'),src.buffer,c.start,c.end,c.isEffect?'#ffc25b':'#9c8cff');updateEditorUI();
+    });
+    const finish=e=>{
+      if(!original)return;
+      if(changed){
+        const before=timelineClips.map(x=>x.id===c.id?{...x,start:original.start,end:original.end,timelineStart:original.timelineStart}:x);
+        historyStack.push(JSON.stringify(before));if(historyStack.length>40)historyStack.shift();redoStack=[];
+      }
+      getTrimTimeBadge().style.display='none';
+      try{handle.releasePointerCapture(e.pointerId)}catch(_){}
+      original=null;renderTimeline();
+    };
+    handle.addEventListener('pointerup',finish);handle.addEventListener('pointercancel',finish);
+  };
+  bind(left,'left');bind(right,'right');
+}
+function renderSelectionOnly(){document.querySelectorAll('#tracksArea .clip').forEach(el=>el.classList.toggle('selected',el.dataset.id===selectedClipId));}
+function installTimelineGestures(){
+  const v=document.getElementById('timelineViewport');
+  const setFromPointer=e=>{
+    const r=v.getBoundingClientRect();
+    const x=Math.max(TRACK_LABEL_WIDTH,Math.min(r.width,e.clientX-r.left));
+    editorPlayhead=Math.max(0,Math.min(fitDuration,(x-TRACK_LABEL_WIDTH)/pixelsPerSecond));
+    stopTimeline();updateEditorTransform();updateEditorUI();
+  };
+  v.addEventListener('pointerdown',e=>{
+    // 重要：按鈕、音軌標籤、片段都不能被時間軸拖曳事件攔截。
+    // 否則瀏覽器的 pointer capture 會讓「靜音」按鈕收不到 click。
+    if(e.target.closest('button, .track-label, .track-audio-buttons, .clip')) return;
+    draggingTimeline=true;
+    v.setPointerCapture(e.pointerId);
+    setFromPointer(e);
+  });
+  v.addEventListener('pointermove',e=>{if(draggingTimeline)setFromPointer(e)});
+  v.addEventListener('pointerup',e=>{draggingTimeline=false;try{v.releasePointerCapture(e.pointerId)}catch(_){}});
+  v.addEventListener('pointercancel',()=>draggingTimeline=false);
+  window.addEventListener('resize',()=>{if(document.getElementById('musicEditor')?.style.display!=='none')renderTimeline()});
+}
+function updateEditorTransform(){
+  const line=document.querySelector('#timelineViewport .fixed-playhead');
+  if(line)line.style.left=(TRACK_LABEL_WIDTH+editorPlayhead*pixelsPerSecond)+'px';
+}
+function zoomEditor(){fitTimeline();}
+async function toggleTimelinePlay(){if(!timelineClips.length)return alert('請先加入音樂。');if(editorPlaying){stopTimeline();return;}if(!editorAudioContext)editorAudioContext=new(window.AudioContext||window.webkitAudioContext)();if(editorAudioContext.state==='suspended')await editorAudioContext.resume();if(editorPlayhead>=totalDuration())editorPlayhead=0;editorPlaying=true;editorStartedAt=editorAudioContext.currentTime-editorPlayhead;scheduleTimeline(editorPlayhead);const b=document.getElementById('timelinePlayBtn');if(b)b.textContent='⏸';tickTimeline();}
+function scheduleTimeline(from){timelineClips.forEach(c=>{if(!isTrackAudible(c.track))return;const end=clipEnd(c);if(end<=from)return;const node=editorAudioContext.createBufferSource();node.buffer=editorSources[c.sourceIndex].buffer;node.connect(editorAudioContext.destination);const inside=Math.max(0,from-c.timelineStart),delay=Math.max(0,c.timelineStart-from),remain=clipDuration(c)-inside;if(remain>0){node.start(editorAudioContext.currentTime+delay,c.start+inside,remain);editorNodes.push(node)}})}
+function tickTimeline(){if(!editorPlaying)return;editorPlayhead=editorAudioContext.currentTime-editorStartedAt;if(editorPlayhead>=totalDuration()){editorPlayhead=totalDuration();stopTimeline(false);updateEditorTransform();updateEditorUI();return;}updateEditorTransform();updateEditorUI();editorAnimationId=requestAnimationFrame(tickTimeline)}
+function stopTimeline(){editorNodes.forEach(n=>{try{n.stop()}catch(_){}});editorNodes=[];if(editorAnimationId)cancelAnimationFrame(editorAnimationId);editorAnimationId=null;editorPlaying=false;const b=document.getElementById('timelinePlayBtn');if(b)b.textContent='▶'}
+function updateEditorUI(){const total=totalDuration(),txt=document.getElementById('editorTimeText'),status=document.getElementById('timelineStatus');if(txt)txt.textContent=formatPrecise(editorPlayhead)+' / '+formatPrecise(total);if(status)status.textContent='目標長度：01:34～01:35 ｜目前：'+formatPrecise(total)+(total>=94&&total<=95?' ✅ 長度符合目標':'')}
 
-    /* ==================================================
-       【結束】17－播放器元件連接
-    ================================================== */
+let finishedSongUrl=null;
+let finishedSongBlob=null;
+
+async function exportFinishedSong(){
+  if(!timelineClips.length) return alert('請先加入並剪輯音樂。');
+
+  stopTimeline();
+
+  const audibleClips=timelineClips.filter(c=>isTrackAudible(c.track));
+  if(!audibleClips.length) return alert('目前所有音軌都是靜音，沒有可輸出的聲音。');
+
+  const duration=audibleClips.reduce((m,c)=>Math.max(m,clipEnd(c)),0);
+  if(duration<=0) return alert('目前沒有可輸出的內容。');
+
+  const btn=[...document.querySelectorAll('.editor-topbar .ed-btn')].find(b=>b.textContent.includes('輸出成品'));
+  const oldText=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent='⏳ 輸出中...';}
+
+  try{
+    const sampleRate=44100;
+    const OfflineCtx=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+    if(!OfflineCtx) throw new Error('此瀏覽器不支援離線音訊輸出');
+
+    const offline=new OfflineCtx(2,Math.ceil(duration*sampleRate),sampleRate);
+
+    audibleClips.forEach(c=>{
+      const srcInfo=editorSources[c.sourceIndex];
+      if(!srcInfo||!srcInfo.buffer) return;
+      const node=offline.createBufferSource();
+      node.buffer=srcInfo.buffer;
+      node.connect(offline.destination);
+      const len=clipDuration(c);
+      if(len>0) node.start(Math.max(0,c.timelineStart),Math.max(0,c.start),len);
+    });
+
+    const rendered=await offline.startRendering();
+    const wavBlob=audioBufferToWavBlob(rendered);
+    finishedSongBlob=wavBlob;
+
+    if(finishedSongUrl) URL.revokeObjectURL(finishedSongUrl);
+    finishedSongUrl=URL.createObjectURL(wavBlob);
+
+    const area=document.getElementById('finishedSongArea');
+    const player=document.getElementById('finishedSongPlayer');
+    const download=document.getElementById('finishedSongDownload');
+
+    player.src=finishedSongUrl;
+    setupFinishedPlayer();
+    area.style.display='block';
+    area.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(err){
+    console.error(err);
+    alert('輸出失敗：'+(err&&err.message?err.message:'請重新試一次'));
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=oldText||'✅ 剪輯完成';}
+  }
+}
+
+function audioBufferToWavBlob(buffer){
+  const channels=buffer.numberOfChannels;
+  const sampleRate=buffer.sampleRate;
+  const frames=buffer.length;
+  const bytesPerSample=2;
+  const blockAlign=channels*bytesPerSample;
+  const dataSize=frames*blockAlign;
+  const ab=new ArrayBuffer(44+dataSize);
+  const view=new DataView(ab);
+
+  function writeString(offset,str){
+    for(let i=0;i<str.length;i++) view.setUint8(offset+i,str.charCodeAt(i));
+  }
+
+  writeString(0,'RIFF');
+  view.setUint32(4,36+dataSize,true);
+  writeString(8,'WAVE');
+  writeString(12,'fmt ');
+  view.setUint32(16,16,true);
+  view.setUint16(20,1,true);
+  view.setUint16(22,channels,true);
+  view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*blockAlign,true);
+  view.setUint16(32,blockAlign,true);
+  view.setUint16(34,16,true);
+  writeString(36,'data');
+  view.setUint32(40,dataSize,true);
+
+  const channelData=[];
+  for(let ch=0;ch<channels;ch++) channelData.push(buffer.getChannelData(ch));
+
+  let offset=44;
+  for(let i=0;i<frames;i++){
+    for(let ch=0;ch<channels;ch++){
+      let s=Math.max(-1,Math.min(1,channelData[ch][i]));
+      view.setInt16(offset,s<0?s*0x8000:s*0x7fff,true);
+      offset+=2;
+    }
+  }
+  return new Blob([ab],{type:'audio/wav'});
+}
 
 
+function fmtSimpleTime(sec){
+  sec=Math.max(0,Number(sec)||0);
+  const m=Math.floor(sec/60),s=Math.floor(sec%60);
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function setupFinishedPlayer(){
+  const p=document.getElementById('finishedSongPlayer');
+  const seek=document.getElementById('finishedSeek');
+  const cur=document.getElementById('finishedCurrentTime');
+  const dur=document.getElementById('finishedDuration');
+  const play=document.getElementById('finishedPlayBtn');
+  if(!p)return;
+  p.onloadedmetadata=()=>{if(dur)dur.textContent=fmtSimpleTime(p.duration);};
+  p.ontimeupdate=()=>{
+    if(cur)cur.textContent=fmtSimpleTime(p.currentTime);
+    if(seek&&p.duration)seek.value=Math.round((p.currentTime/p.duration)*1000);
+  };
+  p.onplay=()=>{if(play)play.textContent='⏸';};
+  p.onpause=()=>{if(play)play.textContent='▶';};
+  p.onended=()=>{if(play)play.textContent='▶';if(seek)seek.value=0;};
+}
+function toggleFinishedPlay(){
+  const p=document.getElementById('finishedSongPlayer');if(!p||!p.src)return;
+  if(p.paused)p.play();else p.pause();
+}
+function seekFinishedSong(v){
+  const p=document.getElementById('finishedSongPlayer');if(!p||!p.duration)return;
+  p.currentTime=(Number(v)/1000)*p.duration;
+}
+function setFinishedVolume(v){
+  const p=document.getElementById('finishedSongPlayer');if(p)p.volume=Number(v);
+}
 
-    /* ==================================================
-       【開始】18－時間格式轉換
+function projectStamp(){
+  const d=new Date();
+  const y=d.getFullYear(),mo=String(d.getMonth()+1).padStart(2,'0'),da=String(d.getDate()).padStart(2,'0');
+  const h=String(d.getHours()).padStart(2,'0'),mi=String(d.getMinutes()).padStart(2,'0');
+  return `${y}-${mo}-${da}_${h}${mi}`;
+}
+function sanitizeProjectName(name){
+  return String(name||'audio').replace(/[\\/:*?"<>|]/g,'_');
+}
 
-       【作用】
-       把秒數轉成分鐘：秒數。
+/* 簡易 ZIP（STORE/不壓縮），不依賴外部套件。工作包可直接重新匯入本剪輯器。 */
+function crc32(bytes){
+  let c=0xffffffff;
+  for(let i=0;i<bytes.length;i++){
+    c^=bytes[i];
+    for(let k=0;k<8;k++)c=(c>>>1)^((c&1)?0xedb88320:0);
+  }
+  return (c^0xffffffff)>>>0;
+}
+function u16(v){return new Uint8Array([v&255,(v>>>8)&255])}
+function u32(v){return new Uint8Array([v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255])}
+function joinBytes(parts){
+  const len=parts.reduce((n,p)=>n+p.length,0),out=new Uint8Array(len);let o=0;
+  parts.forEach(p=>{out.set(p,o);o+=p.length});return out;
+}
+function makeStoreZip(entries){
+  const enc=new TextEncoder(),locals=[],centrals=[];let offset=0;
+  entries.forEach(ent=>{
+    const name=enc.encode(ent.name),data=ent.data instanceof Uint8Array?ent.data:new Uint8Array(ent.data);
+    const crc=crc32(data);
+    const local=joinBytes([
+      u32(0x04034b50),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),name,data
+    ]);
+    locals.push(local);
+    const central=joinBytes([
+      u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),u16(0),
+      u16(0),u16(0),u32(0),u32(offset),name
+    ]);
+    centrals.push(central);offset+=local.length;
+  });
+  const centralBlock=joinBytes(centrals),localBlock=joinBytes(locals);
+  const end=joinBytes([
+    u32(0x06054b50),u16(0),u16(0),u16(entries.length),u16(entries.length),
+    u32(centralBlock.length),u32(localBlock.length),u16(0)
+  ]);
+  return new Blob([localBlock,centralBlock,end],{type:'application/zip'});
+}
+function readStoreZip(buffer){
+  const b=new Uint8Array(buffer),dv=new DataView(buffer),dec=new TextDecoder(),files={};let p=0;
+  while(p+30<=b.length && dv.getUint32(p,true)===0x04034b50){
+    const method=dv.getUint16(p+8,true);
+    const compSize=dv.getUint32(p+18,true);
+    const nameLen=dv.getUint16(p+26,true),extraLen=dv.getUint16(p+28,true);
+    if(method!==0)throw new Error('這個工作包格式不支援，請使用本剪輯器下載的工作包。');
+    const name=dec.decode(b.slice(p+30,p+30+nameLen));
+    const start=p+30+nameLen+extraLen;
+    files[name]=b.slice(start,start+compSize);
+    p=start+compSize;
+  }
+  return files;
+}
 
-       例如：
+async function downloadWorkPackage(){
+  if(!finishedSongBlob){
+    await exportFinishedSong();
+    if(!finishedSongBlob)return;
+  }
+  const stamp=projectStamp();
+  const enc=new TextEncoder();
+  const sourceMeta=[];
+  const entries=[];
 
-       25秒 → 0:25
-       94秒 → 1:34
-       95秒 → 1:35
-    ================================================== */
+  for(let i=0;i<editorSources.length;i++){
+    const s=editorSources[i];
+    const originalName=s.file&&s.file.name?s.file.name:`source_${i}.audio`;
+    const safeName=`sources/${String(i+1).padStart(2,'0')}_${sanitizeProjectName(originalName)}`;
+    let bytes;
+    if(s.file&&s.file.arrayBuffer) bytes=new Uint8Array(await s.file.arrayBuffer());
+    else throw new Error('找不到原始音樂素材，無法建立可重新編輯的工作包。');
+    entries.push({name:safeName,data:bytes});
+    sourceMeta.push({path:safeName,name:originalName,type:(s.file&&s.file.type)||'application/octet-stream',isEffect:!!s.isEffect});
+  }
+
+  const project={
+    format:'TDS_FREESTYLE_PROJECT',
+    version:1,
+    savedAt:new Date().toISOString(),
+    clips:timelineClips,
+    trackAudioStates:trackAudioStates,
+    sources:sourceMeta
+  };
+  entries.unshift({name:'project.json',data:enc.encode(JSON.stringify(project))});
+  entries.push({name:'自由品勢_剪輯完整版.wav',data:new Uint8Array(await finishedSongBlob.arrayBuffer())});
+
+  const zip=makeStoreZip(entries);
+  const url=URL.createObjectURL(zip);
+  const a=document.createElement('a');
+  a.href=url;a.download=`自由品勢剪輯_${stamp}.zip`;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+async function openWorkPackage(file){
+  if(!file)return;
+  try{
+    stopTimeline();
+    const files=readStoreZip(await file.arrayBuffer());
+    if(!files['project.json'])throw new Error('工作包內找不到 project.json。');
+    const project=JSON.parse(new TextDecoder().decode(files['project.json']));
+    if(project.format!=='TDS_FREESTYLE_PROJECT')throw new Error('這不是自由品勢剪輯工作包。');
+
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!editorAudioContext)editorAudioContext=new AudioCtx();
+
+    const loadedSources=[];
+    for(const meta of project.sources||[]){
+      const bytes=files[meta.path];
+      if(!bytes)throw new Error('工作包缺少原始音樂：'+meta.name);
+      const blob=new Blob([bytes],{type:meta.type||'application/octet-stream'});
+      const f=new File([blob],meta.name,{type:meta.type||'application/octet-stream'});
+      const ab=await f.arrayBuffer();
+      const buffer=await editorAudioContext.decodeAudioData(ab.slice(0));
+      loadedSources.push({file:f,buffer,isEffect:!!meta.isEffect});
+    }
+
+    editorSources=loadedSources;
+    timelineClips=Array.isArray(project.clips)?project.clips:[];
+    trackAudioStates=project.trackAudioStates||{};
+    selectedClipId=null;
+    editorPlayhead=0;
+    historyStack=[];redoStack=[];
+    finishedSongBlob=null;
+    if(finishedSongUrl){URL.revokeObjectURL(finishedSongUrl);finishedSongUrl=null;}
+    const area=document.getElementById('finishedSongArea');if(area)area.style.display='none';
+
+    document.getElementById('categorySelect').value='剪輯';
+    setEditorOnlyUI(true);
+    showMusicEditor();
+    renderTimeline();
+    alert('工作包已開啟，可以從上次的位置繼續剪輯。');
+  }catch(err){
+    console.error(err);
+    alert('工作包開啟失敗：'+(err&&err.message?err.message:'檔案無法讀取'));
+  }
+}
+
+function resetEditor(){if(timelineClips.length&&!confirm('確定清空目前剪輯嗎？'))return;snapshot();stopTimeline();timelineClips=[];trackAudioStates={};selectedClipId=null;editorPlayhead=0;renderTimeline()}
+function formatPrecise(sec){sec=Math.max(0,Number(sec)||0);const m=Math.floor(sec/60),s=(sec%60).toFixed(1).padStart(4,'0');return String(m).padStart(2,'0')+':'+s} function formatRuler(sec){const m=Math.floor(sec/60),s=Math.floor(sec%60);return m+':'+String(s).padStart(2,'0')}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
+function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,data=buffer.getChannelData(0),a=Math.floor(start*buffer.sampleRate),b=Math.min(data.length,Math.floor(end*buffer.sampleRate)),step=Math.max(1,Math.ceil((b-a)/w));ctx.clearRect(0,0,w,h);ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();for(let x=0;x<w;x++){let min=1,max=-1,ss=a+x*step,ee=Math.min(ss+step,b);for(let i=ss;i<ee;i++){const v=data[i];if(v<min)min=v;if(v>max)max=v}ctx.moveTo(x,h/2+min*h*.43);ctx.lineTo(x,h/2+max*h*.43)}ctx.stroke()}
+
+
+    /* =========================
+       音樂資料
+       ========================= */
+
+    const songs = [
+
+      {
+        id: "music01",
+
+        title: "音樂 01",
+
+        file: "music01.mp3",
+
+        downloadName: "自由品勢音樂01.mp3",
+
+        duration: "94 秒",
+
+        category: "震撼",
+
+        tags: "純音樂 ｜ 震撼卡點 ｜ 自由品勢"
+      }
+
+      /*
+      以後新增第 2 首，可以在這裡增加：
+
+      ,
+      {
+        id: "music02",
+        title: "音樂 02",
+        file: "music02.mp3",
+        downloadName: "自由品勢音樂02.mp3",
+        duration: "95 秒",
+        category: "東方",
+        tags: "純音樂 ｜ 東方武術 ｜ 自由品勢"
+      }
+      */
+
+    ];
+
+
+    let favoritesOnly = false;
+
+
+    /* =========================
+       收藏
+       ========================= */
+
+    function isFavorite(songId) {
+
+      return (
+        localStorage.getItem(
+          "favorite_" + songId
+        ) === "true"
+      );
+    }
+
+
+    function toggleFavorite(songId) {
+
+      const current = isFavorite(songId);
+
+      localStorage.setItem(
+        "favorite_" + songId,
+        current ? "false" : "true"
+      );
+
+      const button =
+        document.getElementById(
+          "heart_" + songId
+        );
+
+      if (button) {
+
+        const favorite =
+          isFavorite(songId);
+
+        button.classList.toggle(
+          "active",
+          favorite
+        );
+
+        button.innerHTML =
+          favorite ? "♥" : "♡";
+
+        button.title =
+          favorite
+            ? "取消收藏"
+            : "加入收藏";
+      }
+
+      updateStats();
+
+      if (favoritesOnly) {
+        renderSongs();
+      }
+    }
+
+
+    /* =========================
+       下載次數
+       ========================= */
+
+    function getDownloadCount(songId) {
+
+      return parseInt(
+        localStorage.getItem(
+          "downloads_" + songId
+        ) || "0"
+      );
+    }
+
+
+    /* =========================
+       全部音樂
+       ========================= */
+
+    function showAllSongs() {
+
+      favoritesOnly = false;
+
+      document
+        .getElementById("allTab")
+        .classList.add("active");
+
+      document
+        .getElementById("favoriteTab")
+        .classList.remove("active");
+
+      renderSongs();
+    }
+
+
+    /* =========================
+       我的最愛
+       ========================= */
+
+    function showFavorites() {
+
+      favoritesOnly = true;
+
+      document
+        .getElementById("favoriteTab")
+        .classList.add("active");
+
+      document
+        .getElementById("allTab")
+        .classList.remove("active");
+
+      renderSongs();
+    }
+
+
+    /* =========================
+       三點選單
+       ========================= */
+
+    function toggleMenu(songId) {
+
+      const target =
+        document.getElementById(
+          "menu_" + songId
+        );
+
+      document
+        .querySelectorAll(".song-menu")
+        .forEach(menu => {
+
+          if (menu !== target) {
+            menu.classList.remove("show");
+          }
+
+        });
+
+      if (target) {
+        target.classList.toggle("show");
+      }
+    }
+
+
+    function closeMenus() {
+
+      document
+        .querySelectorAll(".song-menu")
+        .forEach(menu => {
+          menu.classList.remove("show");
+        });
+    }
+
+
+    /* =========================
+       分享
+       ========================= */
+
+    async function shareSong(songId) {
+
+      const song =
+        songs.find(
+          item => item.id === songId
+        );
+
+      if (!song) {
+        alert("找不到這首音樂");
+        return;
+      }
+
+      closeMenus();
+
+      const shareData = {
+
+        title:
+          "自由品勢音樂庫 - " +
+          song.title,
+
+        text:
+          "自由品勢音樂線上試聽：" +
+          song.title,
+
+        url:
+          window.location.href
+      };
+
+
+      if (navigator.share) {
+
+        try {
+
+          await navigator.share(
+            shareData
+          );
+
+          return;
+
+        } catch (error) {
+
+          if (
+            error.name === "AbortError"
+          ) {
+            return;
+          }
+        }
+      }
+
+
+      try {
+
+        await navigator.clipboard.writeText(
+          window.location.href
+        );
+
+        alert("連結已複製！");
+
+      } catch (error) {
+
+        const tempInput =
+          document.createElement(
+            "textarea"
+          );
+
+        tempInput.value =
+          window.location.href;
+
+        document.body.appendChild(
+          tempInput
+        );
+
+        tempInput.select();
+
+        document.execCommand(
+          "copy"
+        );
+
+        document.body.removeChild(
+          tempInput
+        );
+
+        alert(
+          "分享連結已複製！\n可以貼到 LINE、Facebook 或其他地方分享。"
+        );
+      }
+    }
+
+
+    /* =========================
+       下載 MP3
+       不要求姓名
+       ========================= */
+
+    function downloadMusic(songId) {
+
+      const song =
+        songs.find(
+          item => item.id === songId
+        );
+
+      if (!song) {
+        return;
+      }
+
+      closeMenus();
+
+      const oldCount =
+        getDownloadCount(songId);
+
+      localStorage.setItem(
+        "downloads_" + songId,
+        oldCount + 1
+      );
+
+
+      const link =
+        document.createElement("a");
+
+      link.href =
+        song.file;
+
+      link.download =
+        song.downloadName;
+
+      document.body.appendChild(
+        link
+      );
+
+      link.click();
+
+      document.body.removeChild(
+        link
+      );
+
+
+      const countElement =
+        document.getElementById(
+          "downloadCount_" + songId
+        );
+
+      if (countElement) {
+
+        countElement.innerHTML =
+          "⬇ 已下載 " +
+          (oldCount + 1) +
+          " 次";
+      }
+
+      updateStats();
+    }
+
+
+    /* =========================
+       播放 / 暫停
+       ========================= */
+
+    function togglePlay(songId) {
+
+      const audio =
+        document.getElementById(
+          "audio_" + songId
+        );
+
+      if (!audio) {
+        return;
+      }
+
+
+      document
+        .querySelectorAll("audio")
+        .forEach(otherAudio => {
+
+          if (
+            otherAudio !== audio &&
+            !otherAudio.paused
+          ) {
+            otherAudio.pause();
+          }
+
+        });
+
+
+      if (audio.paused) {
+
+        audio.play();
+
+      } else {
+
+        audio.pause();
+      }
+    }
+
+
+    /* =========================
+       時間格式
+       ========================= */
 
     function formatTime(seconds) {
 
-      if (!Number.isFinite(seconds)) {
+      if (
+        !isFinite(seconds)
+      ) {
         return "0:00";
       }
 
       const minutes =
         Math.floor(seconds / 60);
 
-      const remainingSeconds =
-        Math.floor(seconds % 60);
+      const secs =
+        Math.floor(seconds % 60)
+          .toString()
+          .padStart(2, "0");
 
-      return (
-        minutes +
-        ":" +
-        String(remainingSeconds).padStart(2, "0")
-      );
-
+      return minutes + ":" + secs;
     }
 
-    /* ==================================================
-       【結束】18－時間格式轉換
-    ================================================== */
 
+    /* =========================
+       播放器更新
+       ========================= */
 
+    function updatePlayer(songId) {
 
-    /* ==================================================
-       【開始】19－確認音樂成功載入
-
-       【作用】
-       music01.mp3 成功讀取後：
-
-       1. 顯示 ✓ 音樂已載入
-       2. 顯示歌曲真正總時間
-    ================================================== */
-
-    audio.addEventListener(
-      "loadedmetadata",
-      function () {
-
-        musicStatus.textContent =
-          "✓ 音樂已載入";
-
-        musicStatus.className =
-          "music-status success";
-
-        timeDisplay.textContent =
-          "0:00 / " +
-          formatTime(audio.duration);
-
-      }
-    );
-
-    /* ==================================================
-       【結束】19－確認音樂成功載入
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】20－音樂載入失敗檢查
-
-       【作用】
-       如果找不到 music01.mp3：
-
-       顯示：
-       ⚠ music01.mp3 載入失敗
-
-       這樣我們可以立刻知道是檔案問題，
-       而不是播放器按鈕問題。
-    ================================================== */
-
-    audio.addEventListener(
-      "error",
-      function () {
-
-        musicStatus.textContent =
-          "⚠ music01.mp3 載入失敗";
-
-        musicStatus.className =
-          "music-status error";
-
-        console.error(
-          "找不到 music01.mp3，請確認它和 index.html 在同一層，而且檔名完全相同。"
+      const audio =
+        document.getElementById(
+          "audio_" + songId
         );
 
+      const progress =
+        document.getElementById(
+          "progress_" + songId
+        );
+
+      const time =
+        document.getElementById(
+          "time_" + songId
+        );
+
+      if (
+        !audio ||
+        !progress ||
+        !time
+      ) {
+        return;
       }
-    );
-
-    /* ==================================================
-       【結束】20－音樂載入失敗檢查
-    ================================================== */
 
 
+      if (
+        isFinite(audio.duration) &&
+        audio.duration > 0
+      ) {
 
-    /* ==================================================
-       【開始】21－播放／暫停功能
+        progress.value =
+          (audio.currentTime /
+            audio.duration) * 100;
 
-       【作用】
-
-       音樂停止時按 ▶：
-       開始播放。
-
-       音樂播放中按 ⏸：
-       暫停播放。
-    ================================================== */
-
-    playButton.addEventListener(
-      "click",
-      function () {
-
-        if (audio.paused) {
-
-          audio.play()
-            .then(function () {
-
-              playButton.textContent =
-                "⏸";
-
-            })
-            .catch(function (error) {
-
-              console.error(
-                "音樂播放失敗：",
-                error
-              );
-
-              alert(
-                "音樂無法播放，請先查看上方的音樂載入狀態。"
-              );
-
-            });
-
-        } else {
-
-          audio.pause();
-
-          playButton.textContent =
-            "▶";
-
-        }
-
-      }
-    );
-
-    /* ==================================================
-       【結束】21－播放／暫停功能
-    ================================================== */
-
-
-
-    /* ==================================================
-       【開始】22－播放時間自動更新
-
-       【作用】
-       播放音樂時自動更新：
-
-       1. 現在播放到幾秒
-       2. 歌曲總長度
-       3. 進度條位置
-    ================================================== */
-
-    audio.addEventListener(
-      "timeupdate",
-      function () {
-
-        timeDisplay.textContent =
+        time.textContent =
           formatTime(audio.currentTime) +
           " / " +
           formatTime(audio.duration);
 
-        if (
-          Number.isFinite(audio.duration) &&
-          audio.duration > 0
-        ) {
+      } else {
 
-          progressBar.value =
-            (
-              audio.currentTime /
-              audio.duration
-            ) * 100;
+        progress.value = 0;
 
-        }
-
+        time.textContent =
+          formatTime(audio.currentTime) +
+          " / 1:34";
       }
-    );
-
-    /* ==================================================
-       【結束】22－播放時間自動更新
-    ================================================== */
+    }
 
 
+    /* =========================
+       拉動進度
+       ========================= */
 
-    /* ==================================================
-       【開始】23－拖動播放進度
+    function seekSong(songId, value) {
 
-       【作用】
-       用滑鼠或手指拖動進度條，
-       可以跳到歌曲指定的位置。
-    ================================================== */
+      const audio =
+        document.getElementById(
+          "audio_" + songId
+        );
 
-    progressBar.addEventListener(
-      "input",
-      function () {
-
-        if (
-          !Number.isFinite(audio.duration) ||
-          audio.duration <= 0
-        ) {
-          return;
-        }
-
-        audio.currentTime =
-          (
-            Number(progressBar.value) /
-            100
-          ) *
-          audio.duration;
-
+      if (
+        !audio ||
+        !isFinite(audio.duration)
+      ) {
+        return;
       }
-    );
 
-    /* ==================================================
-       【結束】23－拖動播放進度
-    ================================================== */
+      audio.currentTime =
+        audio.duration *
+        (value / 100);
+    }
 
 
+    /* =========================
+       靜音
+       ========================= */
 
-    /* ==================================================
-       【開始】24－音量拉桿功能
+    function toggleMute(songId) {
 
-       【作用】
-       左右拖動調整音量。
+      const audio =
+        document.getElementById(
+          "audio_" + songId
+        );
 
-       同時自動顯示：
+      const button =
+        document.getElementById(
+          "volume_" + songId
+        );
 
-       🔇 靜音
-       🔉 小聲
-       🔊 正常
-    ================================================== */
-
-    volumeControl.addEventListener(
-      "input",
-      function () {
-
-        const volume =
-          Number(volumeControl.value);
-
-        audio.volume =
-          volume;
-
-        audio.muted =
-          false;
-
-        if (volume === 0) {
-
-          volumeIcon.textContent =
-            "🔇";
-
-        } else if (volume < 0.5) {
-
-          volumeIcon.textContent =
-            "🔉";
-
-        } else {
-
-          volumeIcon.textContent =
-            "🔊";
-
-        }
-
+      if (!audio) {
+        return;
       }
-    );
 
-    /* ==================================================
-       【結束】24－音量拉桿功能
-    ================================================== */
+      audio.muted =
+        !audio.muted;
+
+      if (button) {
+
+        button.innerHTML =
+          audio.muted
+            ? "🔇"
+            : "🔊";
+      }
+    }
 
 
+    /* =========================
+       顯示歌曲
+       ========================= */
 
-    /* ==================================================
-       【開始】25－點音量圖示靜音
+    function renderSongs() {
 
-       【作用】
+      const musicList =
+        document.getElementById(
+          "musicList"
+        );
 
-       點 🔊：
-       變成 🔇 並靜音。
 
-       再點 🔇：
-       恢復原本音量。
-    ================================================== */
+      const search =
+        document
+          .getElementById(
+            "searchInput"
+          )
+          .value
+          .trim()
+          .toLowerCase();
 
-    volumeIcon.addEventListener(
-      "click",
-      function () {
 
-        audio.muted =
-          !audio.muted;
+      const category =
+        document
+          .getElementById(
+            "categorySelect"
+          )
+          .value;
 
-        if (audio.muted) {
 
-          volumeIcon.textContent =
-            "🔇";
+      const filteredSongs =
+        songs.filter(song => {
 
-        } else {
+          const matchSearch =
 
-          const volume =
-            Number(volumeControl.value);
+            song.title
+              .toLowerCase()
+              .includes(search)
 
-          if (volume === 0) {
+            ||
 
-            volumeIcon.textContent =
-              "🔇";
+            song.tags
+              .toLowerCase()
+              .includes(search);
 
-          } else if (volume < 0.5) {
 
-            volumeIcon.textContent =
-              "🔉";
+          const matchCategory =
 
-          } else {
+            category === "全部"
 
-            volumeIcon.textContent =
-              "🔊";
+            ||
 
+            song.category === category;
+
+
+          const matchFavorite =
+
+            !favoritesOnly
+
+            ||
+
+            isFavorite(song.id);
+
+
+          return (
+            matchSearch &&
+            matchCategory &&
+            matchFavorite
+          );
+
+        });
+
+
+      if (
+        filteredSongs.length === 0
+      ) {
+
+        musicList.innerHTML = `
+
+          <div class="empty">
+
+            目前沒有符合條件的音樂
+
+          </div>
+
+        `;
+
+        updateStats();
+
+        return;
+      }
+
+
+      musicList.innerHTML =
+
+        filteredSongs
+          .map(song => {
+
+            const favorite =
+              isFavorite(song.id);
+
+            const downloads =
+              getDownloadCount(
+                song.id
+              );
+
+
+            return `
+
+              <div class="music-card">
+
+                <h2>
+                  ${song.title}
+                </h2>
+
+
+                <div class="info">
+
+                  ${song.duration}
+
+                  <br>
+
+                  ${song.tags}
+
+                </div>
+
+
+                <div
+                  id="downloadCount_${song.id}"
+                  class="download-count"
+                >
+
+                  ⬇ 已下載
+                  ${downloads}
+                  次
+
+                </div>
+
+
+                <audio
+                  id="audio_${song.id}"
+                  preload="metadata"
+                  src="${song.file}"
+                  ontimeupdate="
+                    updatePlayer(
+                      '${song.id}'
+                    )
+                  "
+                  onloadedmetadata="
+                    updatePlayer(
+                      '${song.id}'
+                    )
+                  "
+                  onplay="
+                    updatePlayButton(
+                      '${song.id}',
+                      true
+                    )
+                  "
+                  onpause="
+                    updatePlayButton(
+                      '${song.id}',
+                      false
+                    )
+                  "
+                  onended="
+                    updatePlayButton(
+                      '${song.id}',
+                      false
+                    )
+                  "
+                ></audio>
+
+
+                <div class="player-row">
+
+
+                  <div class="custom-player">
+
+
+                    <button
+                      id="play_${song.id}"
+                      class="play-button"
+                      onclick="
+                        togglePlay(
+                          '${song.id}'
+                        )
+                      "
+                      title="播放 / 暫停"
+                    >
+                      ▶
+                    </button>
+
+
+                    <span
+                      id="time_${song.id}"
+                      class="time-display"
+                    >
+                      0:00 / 1:34
+                    </span>
+
+
+                    <input
+                      id="progress_${song.id}"
+                      class="progress"
+                      type="range"
+                      min="0"
+                      max="100"
+                      value="0"
+                      step="0.1"
+                      oninput="
+                        seekSong(
+                          '${song.id}',
+                          this.value
+                        )
+                      "
+                    >
+
+
+                    <button
+                      id="volume_${song.id}"
+                      class="volume-button"
+                      onclick="
+                        toggleMute(
+                          '${song.id}'
+                        )
+                      "
+                      title="靜音 / 開啟聲音"
+                    >
+                      🔊
+                    </button>
+
+
+                  </div>
+
+
+                  <button
+                    id="heart_${song.id}"
+                    class="
+                      heart-button
+                      ${favorite
+                        ? "active"
+                        : ""}
+                    "
+                    onclick="
+                      toggleFavorite(
+                        '${song.id}'
+                      )
+                    "
+                    title="
+                      ${favorite
+                        ? "取消收藏"
+                        : "加入收藏"}
+                    "
+                  >
+                    ${favorite
+                      ? "♥"
+                      : "♡"}
+                  </button>
+
+
+                  <div class="menu-wrap">
+
+
+                    <button
+                      class="menu-button"
+                      onclick="
+                        event.stopPropagation();
+                        toggleMenu(
+                          '${song.id}'
+                        )
+                      "
+                      title="更多選項"
+                    >
+                      ⋮
+                    </button>
+
+
+                    <div
+                      id="menu_${song.id}"
+                      class="song-menu"
+                      onclick="
+                        event.stopPropagation()
+                      "
+                    >
+
+
+                      <button
+                        class="menu-item"
+                        onclick="
+                          shareSong(
+                            '${song.id}'
+                          )
+                        "
+                      >
+                        ↗ 分享
+                      </button>
+
+
+                      <div
+                        class="menu-divider"
+                      ></div>
+
+
+                      <button
+                        class="menu-item"
+                        onclick="
+                          downloadMusic(
+                            '${song.id}'
+                          )
+                        "
+                      >
+                        ⬇ 下載 MP3
+                      </button>
+
+
+                    </div>
+
+
+                  </div>
+
+
+                </div>
+
+              </div>
+
+            `;
+
+          })
+          .join("");
+
+
+      updateStats();
+    }
+
+
+    /* =========================
+       播放按鈕 ▶ / ❚❚
+       ========================= */
+
+    function updatePlayButton(
+      songId,
+      playing
+    ) {
+
+      document
+        .querySelectorAll(
+          ".play-button"
+        )
+        .forEach(button => {
+
+          if (
+            button.id !==
+            "play_" + songId
+          ) {
+            button.innerHTML = "▶";
           }
 
+        });
+
+
+      const button =
+        document.getElementById(
+          "play_" + songId
+        );
+
+      if (button) {
+
+        button.innerHTML =
+          playing
+            ? "❚❚"
+            : "▶";
+      }
+    }
+
+
+    /* =========================
+       統計
+       ========================= */
+
+    function updateStats() {
+
+      let totalDownloads = 0;
+      let totalFavorites = 0;
+
+
+      songs.forEach(song => {
+
+        totalDownloads +=
+          getDownloadCount(
+            song.id
+          );
+
+
+        if (
+          isFavorite(song.id)
+        ) {
+          totalFavorites++;
         }
 
-      }
-    );
-
-    /* ==================================================
-       【結束】25－點音量圖示靜音
-    ================================================== */
+      });
 
 
+      document
+        .getElementById(
+          "stats"
+        )
+        .innerHTML =
 
-    /* ==================================================
-       【開始】26－歌曲播放完畢
+          "🎵 音樂：" +
+          songs.length +
+          " 首" +
 
-       【作用】
-       歌曲播放完後：
+          "　｜　" +
 
-       1. 按鈕恢復 ▶
-       2. 時間回到 0:00
-       3. 進度條回到最前面
-    ================================================== */
+          "♥ 收藏：" +
+          totalFavorites +
+          " 首" +
 
-    audio.addEventListener(
-      "ended",
+          "　｜　" +
+
+          "⬇ 下載：" +
+          totalDownloads +
+          " 次";
+    }
+
+
+    /* 點其他地方關閉三點選單 */
+
+    document.addEventListener(
+      "click",
       function () {
-
-        playButton.textContent =
-          "▶";
-
-        progressBar.value =
-          0;
-
-        audio.currentTime =
-          0;
-
-        timeDisplay.textContent =
-          "0:00 / " +
-          formatTime(audio.duration);
-
+        closeMenus();
       }
     );
 
-    /* ==================================================
-       【結束】26－歌曲播放完畢
-    ================================================== */
 
+    /* 第一次開啟網頁 */
+
+    renderSongs();
 
   </script>
 
 
-</body>
+<!-- ======================================
+     自由品勢音樂庫－密碼登入
+     ====================================== -->
 
+<div id="loginScreen">
+
+  <div class="loginBox">
+
+    <div class="loginLock">🔒</div>
+
+    <h1>自由品勢音樂庫</h1>
+
+    <p>請輸入密碼進入音樂庫</p>
+
+   <input
+  id="sitePassword"
+  type="password"
+  inputmode="numeric"
+  placeholder="請輸入密碼"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="off"
+  spellcheck="false"
+  data-lpignore="true"
+  data-1p-ignore="true"
+  name="music-library-access-code"
+  onkeydown="if(event.key === 'Enter') checkPassword()"
+>
+
+    <button onclick="checkPassword()">
+      進入音樂庫
+    </button>
+
+    <div id="passwordError"></div>
+
+  </div>
+
+</div>
+
+
+<style>
+
+#loginScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b0b12,
+      #24104d
+    );
+}
+
+
+.loginBox {
+  width: 100%;
+  max-width: 380px;
+
+  padding: 35px 25px;
+
+  background: #181821;
+
+  border-radius: 24px;
+
+  text-align: center;
+
+  box-shadow:
+    0 0 35px
+    rgba(116, 76, 255, 0.30);
+}
+
+
+.loginLock {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+
+.loginBox h1 {
+  margin: 0 0 12px;
+
+  font-size: 28px;
+
+  color: white;
+}
+
+
+.loginBox p {
+  margin-bottom: 22px;
+
+  color: #bdbdcc;
+
+  font-size: 16px;
+}
+
+
+#sitePassword {
+  width: 100%;
+  height: 56px;
+
+  padding: 0 16px;
+
+  border: 1px solid #343447;
+  border-radius: 15px;
+
+  outline: none;
+
+  background: #101018;
+
+  color: white;
+
+  font-size: 19px;
+
+  text-align: center;
+}
+
+
+#sitePassword:focus {
+  border-color: #744cff;
+
+  box-shadow:
+    0 0 10px
+    rgba(116, 76, 255, 0.40);
+}
+
+
+.loginBox button {
+  width: 100%;
+  height: 56px;
+
+  margin-top: 15px;
+
+  border: none;
+  border-radius: 15px;
+
+  background: #744cff;
+
+  color: white;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+
+.loginBox button:active {
+  transform: scale(0.98);
+}
+
+
+#passwordError {
+  min-height: 22px;
+
+  margin-top: 15px;
+
+  color: #ff6680;
+
+  font-size: 14px;
+}
+
+</style>
+
+
+<script>
+
+/* ======================================
+   ★ 網站密碼設定 ★
+
+   以後要換密碼
+   只需要修改下面這一行
+   ====================================== */
+
+const SITE_PASSWORD = "05170517";
+
+
+/* ======================================
+   檢查密碼
+   ====================================== */
+
+function checkPassword() {
+
+  const input =
+    document.getElementById(
+      "sitePassword"
+    );
+
+  const error =
+    document.getElementById(
+      "passwordError"
+    );
+
+
+  if (
+    input.value === SITE_PASSWORD
+  ) {
+
+    document
+      .getElementById(
+        "loginScreen"
+      )
+      .style
+      .display = "none";
+
+
+  } else {
+
+    error.textContent =
+      "密碼錯誤，請重新輸入";
+
+
+    input.value = "";
+
+
+    input.focus();
+
+  }
+
+}
+
+</script>
+
+<!-- ======================================
+     密碼登入結束
+     ====================================== -->
+
+</body>
 </html>
