@@ -812,8 +812,12 @@ function createWaveformEditor(
     finalTrack
   );
 
-  drawEditorWaveform(sourceIndex);
+ 
+drawEditorWaveform(sourceIndex);
+enableSelectionHandles(sourceIndex);
 }
+
+    
 
 
 /* =========================
@@ -1292,7 +1296,160 @@ function formatEditorTime(seconds) {
   return minutes + ":" + secs;
 }
 
+/* =========================
+   拖動左右白色把手選取片段
+========================= */
+function enableSelectionHandles(index) {
+  const source = editorSources[index];
 
+  if (!source || !source.canvas || !source.buffer) {
+    return;
+  }
+
+  const canvas = source.canvas;
+
+  canvas.style.touchAction = "none";
+
+  let dragging = null;
+
+  function getPosition(event) {
+    const rect = canvas.getBoundingClientRect();
+
+    const x =
+      Math.max(
+        0,
+        Math.min(
+          rect.width,
+          event.clientX - rect.left
+        )
+      );
+
+    return (
+      x /
+      rect.width *
+      source.buffer.duration
+    );
+  }
+
+  function pointerDown(event) {
+    const duration = source.buffer.duration;
+    const rect = canvas.getBoundingClientRect();
+
+    const startX =
+      source.selectionStart /
+      duration *
+      rect.width;
+
+    const endX =
+      source.selectionEnd /
+      duration *
+      rect.width;
+
+    const pointerX =
+      event.clientX - rect.left;
+
+    const startDistance =
+      Math.abs(pointerX - startX);
+
+    const endDistance =
+      Math.abs(pointerX - endX);
+
+    const hitArea = 25;
+
+    if (
+      startDistance <= hitArea &&
+      startDistance <= endDistance
+    ) {
+      dragging = "start";
+    } else if (endDistance <= hitArea) {
+      dragging = "end";
+    } else {
+      return;
+    }
+
+    canvas.setPointerCapture(event.pointerId);
+
+    event.preventDefault();
+  }
+
+  function pointerMove(event) {
+    if (!dragging) {
+      return;
+    }
+
+    const position = getPosition(event);
+
+    if (dragging === "start") {
+      source.selectionStart =
+        Math.min(
+          position,
+          source.selectionEnd - 0.05
+        );
+
+      source.selectionStart =
+        Math.max(
+          0,
+          source.selectionStart
+        );
+    }
+
+    if (dragging === "end") {
+      source.selectionEnd =
+        Math.max(
+          position,
+          source.selectionStart + 0.05
+        );
+
+      source.selectionEnd =
+        Math.min(
+          source.buffer.duration,
+          source.selectionEnd
+        );
+    }
+
+    drawEditorWaveform(index);
+
+    event.preventDefault();
+  }
+
+  function pointerUp(event) {
+    if (!dragging) {
+      return;
+    }
+
+    dragging = null;
+
+    if (
+      canvas.hasPointerCapture(event.pointerId)
+    ) {
+      canvas.releasePointerCapture(
+        event.pointerId
+      );
+    }
+
+    drawEditorWaveform(index);
+  }
+
+  canvas.addEventListener(
+    "pointerdown",
+    pointerDown
+  );
+
+  canvas.addEventListener(
+    "pointermove",
+    pointerMove
+  );
+
+  canvas.addEventListener(
+    "pointerup",
+    pointerUp
+  );
+
+  canvas.addEventListener(
+    "pointercancel",
+    pointerUp
+  );
+}
 
 
 
