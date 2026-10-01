@@ -427,23 +427,33 @@ function showMusicEditor() {
           自由切割、排列音樂片段並加入音效
         </div>
 
-        <button
-          type="button"
-          style="
-            width:100%;
-            max-width:320px;
-            padding:16px;
-            margin-top:15px;
-            border:0;
-            border-radius:14px;
-            background:#744cff;
-            color:white;
-            font-size:17px;
-            font-weight:bold;
-          "
-        >
-          ＋ 加入音樂
-        </button>
+      <input
+  id="musicFileInput"
+  type="file"
+  accept="audio/*"
+  multiple
+  style="display:none;"
+>
+
+<button
+  type="button"
+  onclick="document.getElementById('musicFileInput').click()"
+  style="
+    width:100%;
+    max-width:320px;
+    padding:16px;
+    margin-top:15px;
+    border:0;
+    border-radius:14px;
+    background:#744cff;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+  "
+>
+  ＋ 加入音樂
+</button>
 
         <p style="
           color:#9999aa;
