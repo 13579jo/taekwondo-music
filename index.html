@@ -821,11 +821,9 @@ function createWaveformEditor(
 ========================= */
 
 function drawEditorWaveform(index) {
+  const source = editorSources[index];
 
-  const source =
-    editorSources[index];
-
-  if (!source || !source.canvas) {
+  if (!source) {
     return;
   }
 
@@ -852,8 +850,7 @@ function drawEditorWaveform(index) {
   );
 
   const data =
-    source.buffer
-      .getChannelData(0);
+    source.buffer.getChannelData(0);
 
   const step =
     Math.ceil(
@@ -873,7 +870,6 @@ function drawEditorWaveform(index) {
     x < width;
     x++
   ) {
-
     let min = 1;
     let max = -1;
 
@@ -891,7 +887,6 @@ function drawEditorWaveform(index) {
       i < end;
       i++
     ) {
-
       const value = data[i];
 
       if (value < min) {
@@ -905,20 +900,91 @@ function drawEditorWaveform(index) {
 
     ctx.moveTo(
       x,
-      middle + min * middle * 0.85
+      middle +
+        min *
+        middle *
+        0.85
     );
 
     ctx.lineTo(
       x,
-      middle + max * middle * 0.85
+      middle +
+        max *
+        middle *
+        0.85
     );
   }
 
   ctx.stroke();
 
-  /* 切割位置 */
-  ctx.strokeStyle = "#ff4f75";
-  ctx.lineWidth = 3;
+  /* 選取範圍 */
+
+  const duration =
+    source.buffer.duration;
+
+  if (
+    typeof source.selectionStart !== "number"
+  ) {
+    source.selectionStart = 0;
+  }
+
+  if (
+    typeof source.selectionEnd !== "number"
+  ) {
+    source.selectionEnd = duration;
+  }
+
+  const startX =
+    (
+      source.selectionStart /
+      duration
+    ) * width;
+
+  const endX =
+    (
+      source.selectionEnd /
+      duration
+    ) * width;
+
+  ctx.fillStyle =
+    "rgba(99, 102, 241, 0.25)";
+
+  ctx.fillRect(
+    startX,
+    0,
+    Math.max(
+      2,
+      endX - startX
+    ),
+    height
+  );
+
+  /* 左右兩條白色把手 */
+
+  const handleWidth = 10;
+
+  ctx.fillStyle = "#ffffff";
+
+  ctx.fillRect(
+    startX -
+      handleWidth / 2,
+    0,
+    handleWidth,
+    height
+  );
+
+  ctx.fillRect(
+    endX -
+      handleWidth / 2,
+    0,
+    handleWidth,
+    height
+  );
+
+  /* 已剪切的位置 */
+
+  ctx.strokeStyle = "#ffcc66";
+  ctx.lineWidth = 2;
 
   source.cuts.forEach(
     function(cutTime) {
@@ -926,7 +992,7 @@ function drawEditorWaveform(index) {
       const cutX =
         (
           cutTime /
-          source.buffer.duration
+          duration
         ) * width;
 
       ctx.beginPath();
@@ -946,14 +1012,15 @@ function drawEditorWaveform(index) {
   );
 
   /* 白色播放位置線 */
+
   const playX =
     (
       source.playhead /
-      source.buffer.duration
+      duration
     ) * width;
 
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 2;
 
   ctx.beginPath();
 
@@ -969,14 +1036,30 @@ function drawEditorWaveform(index) {
 
   ctx.stroke();
 
-  source.timeDisplay.textContent =
-    formatEditorTime(source.playhead) +
-    " / " +
-    formatEditorTime(
-      source.buffer.duration
-    );
+  /* 更新時間 */
+
+  if (source.timeDisplay) {
+    source.timeDisplay.textContent =
+      formatEditorTime(
+        source.playhead
+      ) +
+      " / " +
+      formatEditorTime(
+        duration
+      );
+  }
 }
 
+
+
+
+
+
+
+
+
+
+    
 
 /* =========================
    播放 / 暫停原始音樂
