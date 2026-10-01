@@ -328,13 +328,14 @@
     <select
       id="categorySelect"
       class="category-select"
-      onchange="renderSongs()"
+      onchange="handleCategoryChange()"
     >
       <option value="全部">全部分類</option>
       <option value="震撼">震撼</option>
       <option value="東方">東方武術</option>
       <option value="電子">電子</option>
       <option value="優雅">優雅</option>
+      <option value="剪輯">✂️ 音樂剪輯</option>
     </select>
 
   </div>
@@ -373,6 +374,123 @@
 
 
   <script>
+
+/* =========================
+   音樂剪輯頁面切換
+========================= */
+
+function handleCategoryChange() {
+
+  const category =
+    document.getElementById("categorySelect").value;
+
+  if (category === "剪輯") {
+
+    showMusicEditor();
+
+  } else {
+
+    const editor =
+      document.getElementById("musicEditor");
+
+    if (editor) {
+      editor.style.display = "none";
+    }
+
+    document.getElementById("musicList").style.display = "";
+    document.getElementById("stats").style.display = "";
+
+    renderSongs();
+  }
+}
+
+function showMusicEditor() {
+
+  document.getElementById("musicList").style.display = "none";
+  document.getElementById("stats").style.display = "none";
+
+  let editor =
+    document.getElementById("musicEditor");
+
+  if (!editor) {
+
+    editor = document.createElement("div");
+    editor.id = "musicEditor";
+    editor.className = "music-list";
+
+    editor.innerHTML = `
+      <div class="music-card" style="text-align:center;">
+
+        <h2>✂️ 音樂剪輯工作室</h2>
+
+        <div class="info">
+          自由切割、排列音樂片段並加入音效
+        </div>
+
+        <button
+          type="button"
+          style="
+            width:100%;
+            max-width:320px;
+            padding:16px;
+            margin-top:15px;
+            border:0;
+            border-radius:14px;
+            background:#744cff;
+            color:white;
+            font-size:17px;
+            font-weight:bold;
+          "
+        >
+          ＋ 加入音樂
+        </button>
+
+        <p style="
+          color:#9999aa;
+          margin-top:20px;
+        ">
+          剪輯時間軸將顯示在這裡
+        </p>
+
+      </div>
+    `;
+
+    document
+      .getElementById("musicList")
+      .insertAdjacentElement(
+        "afterend",
+        editor
+      );
+  }
+
+  editor.style.display = "";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     /* =========================
        音樂資料
@@ -1583,1026 +1701,6 @@ function checkPassword() {
 
   
 </html>
-
-
-
-
-<!-- =====================================================
-     ✂️ 自由品勢音樂庫－簡易音樂剪輯器
-     整段放在 </body> 上方
-===================================================== -->
-
-<style>
-  .simple-editor {
-    width: 90%;
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 24px;
-    background: #181821;
-    border-radius: 22px;
-    box-shadow: 0 0 25px rgba(116, 76, 255, .20);
-    color: white;
-  }
-
-  .simple-editor h2 {
-    margin: 0 0 8px;
-    font-size: 26px;
-  }
-
-  .editor-desc {
-    color: #aaaabc;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-
-  .editor-song {
-    padding: 18px;
-    margin-top: 15px;
-    background: #22222d;
-    border-radius: 16px;
-  }
-
-  .editor-song h3 {
-    margin: 0 0 15px;
-  }
-
-  .editor-file {
-    width: 100%;
-    margin-bottom: 14px;
-    color: white;
-  }
-
-  .editor-audio {
-    width: 100%;
-    margin: 8px 0 15px;
-  }
-
-  .editor-time-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .editor-time-box label {
-    display: block;
-    margin-bottom: 7px;
-    color: #bdbdcc;
-    font-size: 14px;
-  }
-
-  .editor-time-box input {
-    width: 100%;
-    height: 48px;
-    padding: 0 12px;
-    border: 1px solid #393949;
-    border-radius: 12px;
-    background: #101018;
-    color: white;
-    font-size: 16px;
-  }
-
-  .editor-duration {
-    margin-top: 18px;
-    padding: 16px;
-    text-align: center;
-    background: #101018;
-    border-radius: 14px;
-    font-size: 18px;
-  }
-
-  .editor-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 15px;
-  }
-
-  .editor-btn {
-    min-height: 52px;
-    border: 0;
-    border-radius: 14px;
-    background: #744cff;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .editor-btn.secondary {
-    background: #30303d;
-  }
-
-  .editor-btn:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-  }
-
-  #editorMessage {
-    min-height: 22px;
-    margin-top: 14px;
-    text-align: center;
-    color: #c6b8ff;
-    font-size: 14px;
-  }
-
-  #resultAudio {
-    width: 100%;
-    margin-top: 15px;
-    display: none;
-  }
-
-  @media (max-width: 650px) {
-    .simple-editor {
-      width: 92%;
-      padding: 18px;
-    }
-
-    .editor-time-row,
-    .editor-buttons {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
-
-
-<div class="simple-editor">
-
-  <h2>✂️ 簡易音樂剪輯</h2>
-
-  <div class="editor-desc">
-    選擇兩首音樂，只保留需要的片段，
-    再把兩段合成一首新的音樂。
-  </div>
-
-
-  <!-- 第一首 -->
-  <div class="editor-song">
-
-    <h3>🎵 第一首音樂</h3>
-
-    <input
-      id="fileA"
-      class="editor-file"
-      type="file"
-      accept="audio/*"
-    >
-
-    <audio
-      id="audioA"
-      class="editor-audio"
-      controls
-    ></audio>
-
-    <div class="editor-time-row">
-
-      <div class="editor-time-box">
-        <label>開始時間（秒）</label>
-
-        <input
-          id="startA"
-          type="number"
-          value="0"
-          min="0"
-          step="0.1"
-          oninput="updateEditorDuration()"
-        >
-      </div>
-
-      <div class="editor-time-box">
-        <label>結束時間（秒）</label>
-
-        <input
-          id="endA"
-          type="number"
-          value="0"
-          min="0"
-          step="0.1"
-          oninput="updateEditorDuration()"
-        >
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- 第二首 -->
-  <div class="editor-song">
-
-    <h3>🎵 第二首音樂</h3>
-
-    <input
-      id="fileB"
-      class="editor-file"
-      type="file"
-      accept="audio/*"
-    >
-
-    <audio
-      id="audioB"
-      class="editor-audio"
-      controls
-    ></audio>
-
-    <div class="editor-time-row">
-
-      <div class="editor-time-box">
-        <label>開始時間（秒）</label>
-
-        <input
-          id="startB"
-          type="number"
-          value="0"
-          min="0"
-          step="0.1"
-          oninput="updateEditorDuration()"
-        >
-      </div>
-
-      <div class="editor-time-box">
-        <label>結束時間（秒）</label>
-
-        <input
-          id="endB"
-          type="number"
-          value="0"
-          min="0"
-          step="0.1"
-          oninput="updateEditorDuration()"
-        >
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="editorDuration"
-    class="editor-duration"
-  >
-    合成後長度：0:00
-  </div>
-
-
-  <div class="editor-buttons">
-
-    <button
-      class="editor-btn"
-      onclick="createEditedMusic()"
-    >
-      🎵 產生剪輯音樂
-    </button>
-
-    <button
-      id="downloadEditedMusic"
-      class="editor-btn secondary"
-      onclick="downloadEditedMusic()"
-      disabled
-    >
-      ⬇ 下載剪輯音樂
-    </button>
-
-  </div>
-
-
-  <audio
-    id="resultAudio"
-    controls
-  ></audio>
-
-  <div id="editorMessage"></div>
-
-</div>
-
-
-<script>
-
-  /* =====================================================
-     音樂剪輯器 JavaScript
-  ===================================================== */
-
-  let decodedA = null;
-  let decodedB = null;
-
-  let editedMusicURL = null;
-
-
-  const editorAudioContext =
-    new (
-      window.AudioContext ||
-      window.webkitAudioContext
-    )();
-
-
-  /* =============================
-     選擇第一首音樂
-  ============================= */
-
-  document
-    .getElementById("fileA")
-    .addEventListener(
-      "change",
-      async function () {
-
-        const file = this.files[0];
-
-        if (!file) return;
-
-
-        document
-          .getElementById("audioA")
-          .src =
-          URL.createObjectURL(file);
-
-
-        showEditorMessage(
-          "正在讀取第一首音樂..."
-        );
-
-
-        try {
-
-          const buffer =
-            await file.arrayBuffer();
-
-
-          decodedA =
-            await editorAudioContext
-              .decodeAudioData(buffer);
-
-
-          document
-            .getElementById("endA")
-            .value =
-            decodedA.duration.toFixed(1);
-
-
-          updateEditorDuration();
-
-
-          showEditorMessage(
-            "第一首音樂已載入 ✓"
-          );
-
-
-        } catch (error) {
-
-          decodedA = null;
-
-          showEditorMessage(
-            "第一首音樂無法讀取，請換另一個音樂檔。"
-          );
-
-        }
-
-      }
-    );
-
-
-  /* =============================
-     選擇第二首音樂
-  ============================= */
-
-  document
-    .getElementById("fileB")
-    .addEventListener(
-      "change",
-      async function () {
-
-        const file = this.files[0];
-
-        if (!file) return;
-
-
-        document
-          .getElementById("audioB")
-          .src =
-          URL.createObjectURL(file);
-
-
-        showEditorMessage(
-          "正在讀取第二首音樂..."
-        );
-
-
-        try {
-
-          const buffer =
-            await file.arrayBuffer();
-
-
-          decodedB =
-            await editorAudioContext
-              .decodeAudioData(buffer);
-
-
-          document
-            .getElementById("endB")
-            .value =
-            decodedB.duration.toFixed(1);
-
-
-          updateEditorDuration();
-
-
-          showEditorMessage(
-            "第二首音樂已載入 ✓"
-          );
-
-
-        } catch (error) {
-
-          decodedB = null;
-
-          showEditorMessage(
-            "第二首音樂無法讀取，請換另一個音樂檔。"
-          );
-
-        }
-
-      }
-    );
-
-
-  /* =============================
-     顯示合成長度
-  ============================= */
-
-  function updateEditorDuration() {
-
-    const startA =
-      parseFloat(
-        document.getElementById("startA").value
-      ) || 0;
-
-    const endA =
-      parseFloat(
-        document.getElementById("endA").value
-      ) || 0;
-
-
-    const startB =
-      parseFloat(
-        document.getElementById("startB").value
-      ) || 0;
-
-    const endB =
-      parseFloat(
-        document.getElementById("endB").value
-      ) || 0;
-
-
-    const durationA =
-      Math.max(
-        0,
-        endA - startA
-      );
-
-
-    const durationB =
-      Math.max(
-        0,
-        endB - startB
-      );
-
-
-    const total =
-      durationA + durationB;
-
-
-    document
-      .getElementById("editorDuration")
-      .textContent =
-      "合成後長度：" +
-      editorFormatTime(total) +
-      "（" +
-      total.toFixed(1) +
-      " 秒）";
-  }
-
-
-  /* =============================
-     時間格式
-  ============================= */
-
-  function editorFormatTime(seconds) {
-
-    const minutes =
-      Math.floor(seconds / 60);
-
-    const secs =
-      Math.floor(seconds % 60)
-        .toString()
-        .padStart(2, "0");
-
-
-    return minutes + ":" + secs;
-  }
-
-
-  /* =============================
-     產生剪輯
-  ============================= */
-
-  async function createEditedMusic() {
-
-    if (
-      !decodedA ||
-      !decodedB
-    ) {
-
-      showEditorMessage(
-        "請先選擇兩首音樂。"
-      );
-
-      return;
-    }
-
-
-    const startA =
-      parseFloat(
-        document.getElementById("startA").value
-      );
-
-    const endA =
-      parseFloat(
-        document.getElementById("endA").value
-      );
-
-
-    const startB =
-      parseFloat(
-        document.getElementById("startB").value
-      );
-
-    const endB =
-      parseFloat(
-        document.getElementById("endB").value
-      );
-
-
-    if (
-      startA < 0 ||
-      endA <= startA ||
-      endA > decodedA.duration
-    ) {
-
-      showEditorMessage(
-        "第一首音樂的開始／結束時間不正確。"
-      );
-
-      return;
-    }
-
-
-    if (
-      startB < 0 ||
-      endB <= startB ||
-      endB > decodedB.duration
-    ) {
-
-      showEditorMessage(
-        "第二首音樂的開始／結束時間不正確。"
-      );
-
-      return;
-    }
-
-
-    showEditorMessage(
-      "正在產生剪輯音樂..."
-    );
-
-
-    try {
-
-      const sampleRate =
-        Math.max(
-          decodedA.sampleRate,
-          decodedB.sampleRate
-        );
-
-
-      const channels =
-        Math.max(
-          decodedA.numberOfChannels,
-          decodedB.numberOfChannels
-        );
-
-
-      const durationA =
-        endA - startA;
-
-      const durationB =
-        endB - startB;
-
-
-      const offline =
-        new OfflineAudioContext(
-          channels,
-          Math.ceil(
-            (durationA + durationB) *
-            sampleRate
-          ),
-          sampleRate
-        );
-
-
-      /* 第一首 */
-
-      const sourceA =
-        offline.createBufferSource();
-
-      sourceA.buffer =
-        decodedA;
-
-      sourceA.connect(
-        offline.destination
-      );
-
-      sourceA.start(
-        0,
-        startA,
-        durationA
-      );
-
-
-      /* 第二首 */
-
-      const sourceB =
-        offline.createBufferSource();
-
-      sourceB.buffer =
-        decodedB;
-
-      sourceB.connect(
-        offline.destination
-      );
-
-      sourceB.start(
-        durationA,
-        startB,
-        durationB
-      );
-
-
-      const rendered =
-        await offline.startRendering();
-
-
-      const wavBlob =
-        audioBufferToWav(rendered);
-
-
-      if (editedMusicURL) {
-
-        URL.revokeObjectURL(
-          editedMusicURL
-        );
-
-      }
-
-
-      editedMusicURL =
-        URL.createObjectURL(
-          wavBlob
-        );
-
-
-      const result =
-        document.getElementById(
-          "resultAudio"
-        );
-
-
-      result.src =
-        editedMusicURL;
-
-      result.style.display =
-        "block";
-
-
-      document
-        .getElementById(
-          "downloadEditedMusic"
-        )
-        .disabled = false;
-
-
-      showEditorMessage(
-        "剪輯完成 ✓ 可以先試聽，再下載。"
-      );
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      showEditorMessage(
-        "剪輯失敗，請重新選擇音樂再試一次。"
-      );
-
-    }
-
-  }
-
-
-  /* =============================
-     下載剪輯結果
-  ============================= */
-
-  function downloadEditedMusic() {
-
-    if (!editedMusicURL) {
-
-      showEditorMessage(
-        "請先產生剪輯音樂。"
-      );
-
-      return;
-    }
-
-
-    const link =
-      document.createElement("a");
-
-
-    link.href =
-      editedMusicURL;
-
-
-    link.download =
-      "自由品勢剪輯音樂.wav";
-
-
-    document.body.appendChild(
-      link
-    );
-
-
-    link.click();
-
-
-    document.body.removeChild(
-      link
-    );
-
-  }
-
-
-  /* =============================
-     訊息
-  ============================= */
-
-  function showEditorMessage(message) {
-
-    document
-      .getElementById(
-        "editorMessage"
-      )
-      .textContent =
-      message;
-
-  }
-
-
-  /* =============================
-     AudioBuffer → WAV
-  ============================= */
-
-  function audioBufferToWav(buffer) {
-
-    const channels =
-      buffer.numberOfChannels;
-
-    const sampleRate =
-      buffer.sampleRate;
-
-    const length =
-      buffer.length;
-
-    const bytesPerSample = 2;
-
-    const blockAlign =
-      channels *
-      bytesPerSample;
-
-
-    const arrayBuffer =
-      new ArrayBuffer(
-        44 +
-        length *
-        blockAlign
-      );
-
-
-    const view =
-      new DataView(
-        arrayBuffer
-      );
-
-
-    function writeString(
-      offset,
-      string
-    ) {
-
-      for (
-        let i = 0;
-        i < string.length;
-        i++
-      ) {
-
-        view.setUint8(
-          offset + i,
-          string.charCodeAt(i)
-        );
-
-      }
-
-    }
-
-
-    writeString(
-      0,
-      "RIFF"
-    );
-
-
-    view.setUint32(
-      4,
-      36 +
-      length *
-      blockAlign,
-      true
-    );
-
-
-    writeString(
-      8,
-      "WAVE"
-    );
-
-
-    writeString(
-      12,
-      "fmt "
-    );
-
-
-    view.setUint32(
-      16,
-      16,
-      true
-    );
-
-
-    view.setUint16(
-      20,
-      1,
-      true
-    );
-
-
-    view.setUint16(
-      22,
-      channels,
-      true
-    );
-
-
-    view.setUint32(
-      24,
-      sampleRate,
-      true
-    );
-
-
-    view.setUint32(
-      28,
-      sampleRate *
-      blockAlign,
-      true
-    );
-
-
-    view.setUint16(
-      32,
-      blockAlign,
-      true
-    );
-
-
-    view.setUint16(
-      34,
-      16,
-      true
-    );
-
-
-    writeString(
-      36,
-      "data"
-    );
-
-
-    view.setUint32(
-      40,
-      length *
-      blockAlign,
-      true
-    );
-
-
-    const channelData = [];
-
-    for (
-      let channel = 0;
-      channel < channels;
-      channel++
-    ) {
-
-      channelData.push(
-        buffer.getChannelData(
-          channel
-        )
-      );
-
-    }
-
-
-    let offset = 44;
-
-
-    for (
-      let i = 0;
-      i < length;
-      i++
-    ) {
-
-      for (
-        let channel = 0;
-        channel < channels;
-        channel++
-      ) {
-
-        const sourceChannel =
-          Math.min(
-            channel,
-            buffer.numberOfChannels - 1
-          );
-
-
-        let sample =
-          channelData[sourceChannel][i];
-
-
-        sample =
-          Math.max(
-            -1,
-            Math.min(
-              1,
-              sample
-            )
-          );
-
-
-        view.setInt16(
-          offset,
-          sample < 0
-            ? sample * 0x8000
-            : sample * 0x7FFF,
-          true
-        );
-
-
-        offset += 2;
-
-      }
-
-    }
-
-
-    return new Blob(
-      [arrayBuffer],
-      {
-        type: "audio/wav"
-      }
-    );
-
-  }
-
-</script>
-
-<!-- ===== 簡易音樂剪輯器結束 ===== -->
-
-
-
- </body>
-
-
 
 
 
