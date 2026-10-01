@@ -475,7 +475,84 @@ function showMusicEditor() {
 
   editor.style.display = "";
 }
+/* =========================
+   選擇音樂後加入剪輯工作室
+========================= */
 
+document.addEventListener("change", function(event) {
+
+  if (event.target.id !== "musicFileInput") {
+    return;
+  }
+
+  const files = Array.from(event.target.files);
+
+  if (files.length === 0) {
+    return;
+  }
+
+  const editor = document.getElementById("musicEditor");
+
+  let area = document.getElementById("loadedMusicArea");
+
+  if (!area) {
+
+    area = document.createElement("div");
+    area.id = "loadedMusicArea";
+
+    area.style.cssText = `
+      margin-top:20px;
+      text-align:left;
+    `;
+
+    editor
+      .querySelector(".music-card")
+      .appendChild(area);
+  }
+
+  files.forEach(function(file) {
+
+    const url = URL.createObjectURL(file);
+
+    const musicBox = document.createElement("div");
+
+    musicBox.style.cssText = `
+      background:#101018;
+      padding:15px;
+      margin-top:12px;
+      border-radius:14px;
+    `;
+
+    const title = document.createElement("div");
+
+    title.textContent = "🎵 " + file.name;
+
+    title.style.cssText = `
+      color:white;
+      font-weight:bold;
+      margin-bottom:10px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    `;
+
+    const audio = document.createElement("audio");
+
+    audio.controls = true;
+    audio.src = url;
+    audio.style.width = "100%";
+
+    musicBox.appendChild(title);
+    musicBox.appendChild(audio);
+
+    area.appendChild(musicBox);
+
+  });
+
+  event.target.value = "";
+
+});
+    
 
 
 
