@@ -442,8 +442,8 @@ function showMusicEditor(){
         <div class="editor-tool-row">
           <button class="ed-btn" onclick="undoEditor()">↶ 復原</button>
           <button class="ed-btn" onclick="redoEditor()">↷ 重做</button>
-          <button class="ed-btn primary" onclick="exportFinishedSong()">✅ 剪輯完成</button>
-          <button class="ed-btn" onclick="document.getElementById('projectFileInput').click()">📂 開啟工作包</button>
+          <button class="ed-btn primary" onclick="exportFinishedSong()">✅ 完成</button>
+          <button class="ed-btn" onclick="document.getElementById('projectFileInput').click()">📂 紀錄</button>
         </div>
         <input id="projectFileInput" type="file" accept=".zip,application/zip" style="display:none" onchange="openWorkPackage(this.files[0]);this.value=''">
       </div>
