@@ -319,7 +319,14 @@
         height: 46px;
       }
     }
-  </style>
+  
+/* 剪輯工作室頁：上方不顯示「剪輯音樂」與「工作包」 */
+body.editor-mode [data-nav="editor"],
+body.editor-mode [data-nav="workpackage"] { display:none !important; }
+
+
+.effect-modal{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:16px}.effect-panel{width:min(720px,96vw);max-height:84vh;overflow:auto;background:#181821;border:1px solid #3b3b4c;border-radius:18px;padding:16px}.effect-head{display:flex;justify-content:space-between;align-items:center;font-size:21px;margin-bottom:5px}.effect-head button{border:0;background:#30303d;color:#fff;border-radius:9px;padding:8px 11px}.effect-sub{color:#aaa;font-size:13px;margin-bottom:12px}.effect-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.effect-item{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;background:#23232e;border-radius:10px;padding:9px}.effect-item span{font-size:13px}.effect-item button,.effect-upload-own{border:0;border-radius:8px;background:#353545;color:#fff;padding:8px;font-weight:700}.effect-item .add-effect{background:#744cff}.effect-upload-own{width:100%;margin-top:12px;padding:11px}@media(max-width:650px){.effect-list{grid-template-columns:1fr}.effect-item{grid-template-columns:1fr auto auto}}
+</style>
 </head>
 
 <body>
@@ -377,9 +384,9 @@
     <button id="homeTab" class="tab-button active" onclick="showHomePage()">🏠 回主頁</button>
     <button id="uploadTab" class="tab-button" onclick="openLibraryUpload()">⬆️ 上傳音樂</button>
     <button id="favoriteTab" class="tab-button" onclick="showFavorites()">♥ 我的最愛</button>
-    <button id="editTab" class="tab-button" onclick="openEditorFromNav()">✂️ 剪輯音樂</button>
-    <button id="worksTab" class="tab-button" onclick="showFinishedWorks()">🎵 我的剪輯作品</button>
-    <button id="packagesTab" class="tab-button" onclick="showWorkPackages()">📂 工作包</button>
+    <button id="editTab" class="tab-button" onclick="openEditorFromNav()" data-nav="editor">✂️ 剪輯音樂</button>
+    <button id="worksTab" class="tab-button" onclick="showFinishedWorks()">🎵 剪輯作品</button>
+    <button id="packagesTab" class="tab-button" onclick="showWorkPackages()" data-nav="workpackage">📂 工作包</button>
     <input id="libraryUploadInput" type="file" accept="audio/*" multiple hidden onchange="handleLibraryUpload(this.files);this.value=''">
   </div>
 
@@ -394,6 +401,13 @@
 
 
   <script>
+const BUILTIN_EFFECTS=[{"name":"電影重擊","file":"effects/01_電影重擊.wav"},{"name":"超低頻 Boom","file":"effects/02_超低頻Boom.wav"},{"name":"電流閃擊","file":"effects/03_電流閃擊.wav"},{"name":"遠雷滾動","file":"effects/04_遠雷滾動.wav"},{"name":"東方大鼓","file":"effects/05_東方大鼓.wav"},{"name":"三連戰鼓","file":"effects/06_三連戰鼓.wav"},{"name":"五連加速鼓","file":"effects/07_五連加速鼓.wav"},{"name":"拔刀","file":"effects/08_拔刀.wav"},{"name":"金屬刀劍碰撞","file":"effects/09_金屬刀劍碰撞.wav"},{"name":"短促 Whoosh","file":"effects/10_短促Whoosh.wav"},{"name":"旋轉 Whoosh","file":"effects/11_旋轉Whoosh.wav"},{"name":"飛踢破風","file":"effects/12_飛踢破風.wav"},{"name":"爆炸衝擊","file":"effects/13_爆炸衝擊.wav"},{"name":"能量上升 Riser","file":"effects/14_能量上升Riser.wav"},{"name":"低頻下墜","file":"effects/15_低頻下墜.wav"},{"name":"清脆水滴","file":"effects/16_清脆水滴.wav"},{"name":"東方銅鑼","file":"effects/17_東方銅鑼.wav"},{"name":"猛禽高鳴","file":"effects/18_猛禽高鳴.wav"},{"name":"神秘閃光","file":"effects/19_神秘閃光.wav"},{"name":"終極結尾 Hit","file":"effects/20_終極結尾Hit.wav"}];
+let effectPreviewAudio=null;
+function openEffectLibrary(){const m=document.getElementById('effectLibraryModal'),l=document.getElementById('effectLibraryList');l.innerHTML=BUILTIN_EFFECTS.map((e,i)=>`<div class="effect-item"><span>${String(i+1).padStart(2,'0')}｜${escapeHtml(e.name)}</span><button type="button" onclick="previewBuiltinEffect(${i})">▶ 試聽</button><button type="button" class="add-effect" onclick="addBuiltinEffect(${i})">＋ 加入</button></div>`).join('');m.style.display='flex';}
+function closeEffectLibrary(){const m=document.getElementById('effectLibraryModal');if(m)m.style.display='none';if(effectPreviewAudio){effectPreviewAudio.pause();effectPreviewAudio=null;}}
+function previewBuiltinEffect(i){if(effectPreviewAudio)effectPreviewAudio.pause();effectPreviewAudio=new Audio(BUILTIN_EFFECTS[i].file);effectPreviewAudio.play().catch(()=>alert('找不到音效檔，請確認 effects 資料夾已一起上傳。'));}
+async function addBuiltinEffect(i){try{const e=BUILTIN_EFFECTS[i],r=await fetch(e.file);if(!r.ok)throw Error();const blob=await r.blob(),file=new File([blob],e.file.split('/').pop(),{type:'audio/wav'});if(!editorAudioContext)editorAudioContext=new(window.AudioContext||window.webkitAudioContext)();const buffer=await editorAudioContext.decodeAudioData((await file.arrayBuffer()).slice(0));snapshot();const sourceIndex=editorSources.length;editorSources.push({file,buffer,isEffect:true});timelineClips.push(newClip(sourceIndex,0,buffer.duration,editorPlayhead,nextFreeTrack(),true));renderTimeline();closeEffectLibrary();}catch(err){alert('音效加入失敗，請確認 effects 資料夾已一起上傳。');}}
+
 
 /* ============================================================
    【功能 01】影片式多軌音樂剪輯工作室
@@ -408,6 +422,7 @@ const TRACK_LABEL_WIDTH=window.innerWidth<650?72:96;
 let fitDuration=95;
 
 function setEditorOnlyUI(isEditor){
+  document.body.classList.toggle('editor-mode', !!isEditor);
   const search=document.getElementById('searchInput');
   if(search) search.style.display=isEditor?'none':'';
 }
@@ -435,7 +450,7 @@ function showMusicEditor(){
       <div class="editor-topbar">
         <div class="editor-tool-row">
           <button class="ed-btn primary" onclick="document.getElementById('musicFileInput').click()">＋ 音樂</button>
-          <button class="ed-btn" onclick="document.getElementById('effectFileInput').click()">⚡ 音效</button>
+          <button class="ed-btn" onclick="openEffectLibrary()">⚡ 音效</button>
           <button class="ed-btn" onclick="splitSelectedClip()">✂️ 分割</button>
           <button class="ed-btn" onclick="deleteSelectedClip()">🗑 刪除</button>
         </div>
@@ -472,7 +487,7 @@ function showMusicEditor(){
           <span class="finished-volume-icon">🔊</span>
           <input id="finishedVolume" type="range" min="0" max="1" step="0.05" value="1" oninput="setFinishedVolume(this.value)">
         </div>
-        <button id="finishedSongDownload" type="button" class="finished-download" onclick="downloadWorkPackage()">⬇️ 下載完整版／工作包</button>
+        <button id="finishedSongDownload" type="button" class="finished-download" onclick="downloadWorkPackage()" data-nav="workpackage">⬇️ 下載完整版／工作包</button>
       </div>
     </div>`;
     document.getElementById('musicList').insertAdjacentElement('afterend',editor);
@@ -996,6 +1011,33 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
         category: "震撼",
 
         tags: "純音樂 ｜ 震撼卡點 ｜ 自由品勢"
+      },
+      {
+        id: "music02",
+        title: "Dark",
+        file: "music02.mp3",
+        downloadName: "Dark.mp3",
+        duration: "159 秒",
+        category: "震撼",
+        tags: "震撼 ｜ 電影感 ｜ 自由品勢"
+      },
+      {
+        id: "music03",
+        title: "Suspense Tension",
+        file: "music03.mp3",
+        downloadName: "Suspense-Tension.mp3",
+        duration: "59 秒",
+        category: "震撼",
+        tags: "震撼 ｜ 緊張感 ｜ 自由品勢"
+      },
+      {
+        id: "music04",
+        title: "Aggressive Low Frequency Growl",
+        file: "music04.mp3",
+        downloadName: "Aggressive-Low-Frequency-Growl.mp3",
+        duration: "37 秒",
+        category: "震撼",
+        tags: "震撼 ｜ 低頻 ｜ 音效感 ｜ 自由品勢"
       }
 
       /*
@@ -1128,7 +1170,7 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
       const panel=document.createElement('div'); panel.id='featurePanel'; panel.className='feature-panel';
       if(type==='works'){
         setMainNavActive('worksTab');
-        panel.innerHTML='<h2>🎵 我的剪輯作品</h2><p>之後每一次按「剪輯完成」的歌曲都會保留在這裡，可試聽、下載及重新命名。</p><div class="feature-empty">目前還沒有保存到作品庫的成品。</div>';}
+        panel.innerHTML='<h2>🎵 剪輯作品</h2><p>之後每一次按「剪輯完成」的歌曲都會保留在這裡，可試聽、下載及重新命名。</p><div class="feature-empty">目前還沒有保存到作品庫的成品。</div>';}
       else{
         setMainNavActive('packagesTab');
         panel.innerHTML='<h2>📂 工作包</h2><p>這裡會顯示可以重新開啟、繼續修改的剪輯工程。</p><div class="feature-empty">目前還沒有網站內的工作包紀錄。</div>';}
@@ -2223,5 +2265,5 @@ function checkPassword() {
      密碼登入結束
      ====================================== -->
 
-</body>
+<div id="effectLibraryModal" class="effect-modal" style="display:none"><div class="effect-panel"><div class="effect-head"><b>⚡ 自由品勢音效庫</b><button type="button" onclick="closeEffectLibrary()">✕</button></div><div class="effect-sub">先試聽，喜歡再直接加入新的音效軌。</div><div id="effectLibraryList" class="effect-list"></div><button class="effect-upload-own" type="button" onclick="document.getElementById('effectFileInput').click()">⬆️ 上傳自己的音效</button></div></div></body>
 </html>
