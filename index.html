@@ -83,6 +83,26 @@
       background: #744cff;
     }
 
+    .main-nav {
+      flex-wrap: wrap;
+    }
+    .main-nav .tab-button {
+      flex: 1 1 135px;
+      min-height: 48px;
+    }
+    .feature-panel {
+      width: 90%;
+      max-width: 900px;
+      margin: 18px auto;
+      background: #181821;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 0 25px rgba(120,70,255,.16);
+    }
+    .feature-panel h2 { margin: 0 0 10px; }
+    .feature-panel p { color:#bdbdcc; line-height:1.7; }
+    .feature-empty { padding:28px 10px; text-align:center; color:#9999aa; }
+
     .stats {
       width: 90%;
       max-width: 900px;
@@ -353,24 +373,14 @@
      作用：切換全部歌曲與收藏歌曲
 ========================= -->
 
-  <div class="tabs">
-
-    <button
-      id="allTab"
-      class="tab-button active"
-      onclick="showAllSongs()"
-    >
-      🎵 全部音樂
-    </button>
-
-    <button
-      id="favoriteTab"
-      class="tab-button"
-      onclick="showFavorites()"
-    >
-      ♥ 我的最愛
-    </button>
-
+  <div class="tabs main-nav">
+    <button id="homeTab" class="tab-button active" onclick="showHomePage()">🏠 回主頁</button>
+    <button id="uploadTab" class="tab-button" onclick="openLibraryUpload()">⬆️ 上傳音樂</button>
+    <button id="favoriteTab" class="tab-button" onclick="showFavorites()">♥ 我的最愛</button>
+    <button id="editTab" class="tab-button" onclick="openEditorFromNav()">✂️ 剪輯音樂</button>
+    <button id="worksTab" class="tab-button" onclick="showFinishedWorks()">🎵 我的剪輯作品</button>
+    <button id="packagesTab" class="tab-button" onclick="showWorkPackages()">📂 工作包</button>
+    <input id="libraryUploadInput" type="file" accept="audio/*" multiple hidden onchange="handleLibraryUpload(this.files);this.value=''">
   </div>
 
 
@@ -399,9 +409,7 @@ let fitDuration=95;
 
 function setEditorOnlyUI(isEditor){
   const search=document.getElementById('searchInput');
-  const tabs=document.querySelector('.tabs');
   if(search) search.style.display=isEditor?'none':'';
-  if(tabs) tabs.style.display=isEditor?'none':'';
 }
 function handleCategoryChange(){
   const category=document.getElementById('categorySelect').value;
@@ -691,7 +699,7 @@ async function exportFinishedSong(){
   const duration=audibleClips.reduce((m,c)=>Math.max(m,clipEnd(c)),0);
   if(duration<=0) return alert('目前沒有可輸出的內容。');
 
-  const btn=[...document.querySelectorAll('.editor-topbar .ed-btn')].find(b=>b.textContent.includes('輸出成品'));
+  const btn=[...document.querySelectorAll('.editor-topbar .ed-btn')].find(b=>b.textContent.includes('剪輯完成'));
   const oldText=btn?btn.textContent:'';
   if(btn){btn.disabled=true;btn.textContent='⏳ 輸出中...';}
 
@@ -1078,6 +1086,55 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
 
 
     /* =========================
+       主功能導覽（第一版）
+       作用：回主頁、上傳音樂、我的最愛、剪輯音樂、成品、工作包
+       ========================= */
+    function setMainNavActive(id){
+      document.querySelectorAll('.main-nav .tab-button').forEach(b=>b.classList.toggle('active',b.id===id));
+    }
+    function hideFeaturePanel(){
+      const p=document.getElementById('featurePanel'); if(p)p.remove();
+    }
+    function showHomePage(){
+      setEditorOnlyUI(false); hideFeaturePanel();
+      const editor=document.getElementById('musicEditor'); if(editor)editor.style.display='none';
+      document.getElementById('musicList').style.display='';
+      document.getElementById('stats').style.display='';
+      document.getElementById('categorySelect').value='全部';
+      favoritesOnly=false; setMainNavActive('homeTab'); renderSongs();
+    }
+    function openLibraryUpload(){
+      setMainNavActive('uploadTab');
+      document.getElementById('libraryUploadInput').click();
+    }
+    function handleLibraryUpload(files){
+      if(!files||!files.length)return;
+      alert('已選擇 '+files.length+' 首音樂。\n這一版先完成「上傳音樂」入口；下一步會把它接成真正的音樂庫上架功能。');
+      showHomePage();
+    }
+    function openEditorFromNav(){
+      hideFeaturePanel(); setMainNavActive('editTab');
+      document.getElementById('categorySelect').value='剪輯';
+      setEditorOnlyUI(true); showMusicEditor();
+    }
+    function showFeaturePanel(type){
+      setEditorOnlyUI(false);
+      const editor=document.getElementById('musicEditor'); if(editor)editor.style.display='none';
+      document.getElementById('musicList').style.display='none'; document.getElementById('stats').style.display='none';
+      hideFeaturePanel();
+      const panel=document.createElement('div'); panel.id='featurePanel'; panel.className='feature-panel';
+      if(type==='works'){
+        setMainNavActive('worksTab');
+        panel.innerHTML='<h2>🎵 我的剪輯作品</h2><p>之後每一次按「剪輯完成」的歌曲都會保留在這裡，可試聽、下載及重新命名。</p><div class="feature-empty">目前還沒有保存到作品庫的成品。</div>';}
+      else{
+        setMainNavActive('packagesTab');
+        panel.innerHTML='<h2>📂 工作包</h2><p>這裡會顯示可以重新開啟、繼續修改的剪輯工程。</p><div class="feature-empty">目前還沒有網站內的工作包紀錄。</div>';}
+      document.querySelector('.footer').insertAdjacentElement('beforebegin',panel);
+    }
+    function showFinishedWorks(){showFeaturePanel('works');}
+    function showWorkPackages(){showFeaturePanel('packages');}
+
+    /* =========================
        全部音樂
        ========================= */
 
@@ -1085,13 +1142,8 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
 
       favoritesOnly = false;
 
-      document
-        .getElementById("allTab")
-        .classList.add("active");
+      setMainNavActive("homeTab");
 
-      document
-        .getElementById("favoriteTab")
-        .classList.remove("active");
 
       renderSongs();
     }
@@ -1105,13 +1157,12 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
 
       favoritesOnly = true;
 
-      document
-        .getElementById("favoriteTab")
-        .classList.add("active");
+      hideFeaturePanel();
+      setEditorOnlyUI(false);
+      const editor=document.getElementById('musicEditor'); if(editor)editor.style.display='none';
+      document.getElementById('musicList').style.display=''; document.getElementById('stats').style.display='';
+      setMainNavActive("favoriteTab");
 
-      document
-        .getElementById("allTab")
-        .classList.remove("active");
 
       renderSongs();
     }
