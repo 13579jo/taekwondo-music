@@ -203,6 +203,54 @@
       flex-shrink: 0;
     }
 
+    /* 手機播放器修正：讓播放、時間、進度條、喇叭全部留在白色播放器框內 */
+    .custom-player > * {
+      min-width: 0;
+    }
+
+    .volume-button {
+      width: 30px;
+      min-width: 30px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 650px) {
+      .player-row {
+        gap: 5px;
+      }
+
+      .custom-player {
+        gap: 4px;
+        padding: 0 8px;
+        overflow: hidden;
+      }
+
+      .play-button {
+        width: 27px;
+        min-width: 27px;
+        font-size: 19px;
+      }
+
+      .time-display {
+        min-width: 64px;
+        font-size: 12px;
+      }
+
+      .progress {
+        min-width: 18px;
+        width: 100%;
+      }
+
+      .volume-button {
+        width: 27px;
+        min-width: 27px;
+        font-size: 18px;
+      }
+    }
+
     /* 愛心 */
 
     .heart-button {
@@ -324,8 +372,6 @@
 body.editor-mode [data-nav="editor"],
 body.editor-mode [data-nav="workpackage"] { display:none !important; }
 
-
-.effect-modal{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:16px}.effect-panel{width:min(720px,96vw);max-height:84vh;overflow:auto;background:#181821;border:1px solid #3b3b4c;border-radius:18px;padding:16px}.effect-head{display:flex;justify-content:space-between;align-items:center;font-size:21px;margin-bottom:5px}.effect-head button{border:0;background:#30303d;color:#fff;border-radius:9px;padding:8px 11px}.effect-sub{color:#aaa;font-size:13px;margin-bottom:12px}.effect-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.effect-item{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;background:#23232e;border-radius:10px;padding:9px}.effect-item span{font-size:13px}.effect-item button,.effect-upload-own{border:0;border-radius:8px;background:#353545;color:#fff;padding:8px;font-weight:700}.effect-item .add-effect{background:#744cff}.effect-upload-own{width:100%;margin-top:12px;padding:11px}@media(max-width:650px){.effect-list{grid-template-columns:1fr}.effect-item{grid-template-columns:1fr auto auto}}
 </style>
 </head>
 
@@ -401,13 +447,6 @@ body.editor-mode [data-nav="workpackage"] { display:none !important; }
 
 
   <script>
-const BUILTIN_EFFECTS=[{"name":"電影重擊","file":"effects/01_電影重擊.wav"},{"name":"超低頻 Boom","file":"effects/02_超低頻Boom.wav"},{"name":"電流閃擊","file":"effects/03_電流閃擊.wav"},{"name":"遠雷滾動","file":"effects/04_遠雷滾動.wav"},{"name":"東方大鼓","file":"effects/05_東方大鼓.wav"},{"name":"三連戰鼓","file":"effects/06_三連戰鼓.wav"},{"name":"五連加速鼓","file":"effects/07_五連加速鼓.wav"},{"name":"拔刀","file":"effects/08_拔刀.wav"},{"name":"金屬刀劍碰撞","file":"effects/09_金屬刀劍碰撞.wav"},{"name":"短促 Whoosh","file":"effects/10_短促Whoosh.wav"},{"name":"旋轉 Whoosh","file":"effects/11_旋轉Whoosh.wav"},{"name":"飛踢破風","file":"effects/12_飛踢破風.wav"},{"name":"爆炸衝擊","file":"effects/13_爆炸衝擊.wav"},{"name":"能量上升 Riser","file":"effects/14_能量上升Riser.wav"},{"name":"低頻下墜","file":"effects/15_低頻下墜.wav"},{"name":"清脆水滴","file":"effects/16_清脆水滴.wav"},{"name":"東方銅鑼","file":"effects/17_東方銅鑼.wav"},{"name":"猛禽高鳴","file":"effects/18_猛禽高鳴.wav"},{"name":"神秘閃光","file":"effects/19_神秘閃光.wav"},{"name":"終極結尾 Hit","file":"effects/20_終極結尾Hit.wav"}];
-let effectPreviewAudio=null;
-function openEffectLibrary(){const m=document.getElementById('effectLibraryModal'),l=document.getElementById('effectLibraryList');l.innerHTML=BUILTIN_EFFECTS.map((e,i)=>`<div class="effect-item"><span>${String(i+1).padStart(2,'0')}｜${escapeHtml(e.name)}</span><button type="button" onclick="previewBuiltinEffect(${i})">▶ 試聽</button><button type="button" class="add-effect" onclick="addBuiltinEffect(${i})">＋ 加入</button></div>`).join('');m.style.display='flex';}
-function closeEffectLibrary(){const m=document.getElementById('effectLibraryModal');if(m)m.style.display='none';if(effectPreviewAudio){effectPreviewAudio.pause();effectPreviewAudio=null;}}
-function previewBuiltinEffect(i){if(effectPreviewAudio)effectPreviewAudio.pause();effectPreviewAudio=new Audio(BUILTIN_EFFECTS[i].file);effectPreviewAudio.play().catch(()=>alert('找不到音效檔，請確認 effects 資料夾已一起上傳。'));}
-async function addBuiltinEffect(i){try{const e=BUILTIN_EFFECTS[i],r=await fetch(e.file);if(!r.ok)throw Error();const blob=await r.blob(),file=new File([blob],e.file.split('/').pop(),{type:'audio/wav'});if(!editorAudioContext)editorAudioContext=new(window.AudioContext||window.webkitAudioContext)();const buffer=await editorAudioContext.decodeAudioData((await file.arrayBuffer()).slice(0));snapshot();const sourceIndex=editorSources.length;editorSources.push({file,buffer,isEffect:true});timelineClips.push(newClip(sourceIndex,0,buffer.duration,editorPlayhead,nextFreeTrack(),true));renderTimeline();closeEffectLibrary();}catch(err){alert('音效加入失敗，請確認 effects 資料夾已一起上傳。');}}
-
 
 /* ============================================================
    【功能 01】影片式多軌音樂剪輯工作室
@@ -450,7 +489,7 @@ function showMusicEditor(){
       <div class="editor-topbar">
         <div class="editor-tool-row">
           <button class="ed-btn primary" onclick="document.getElementById('musicFileInput').click()">＋ 音樂</button>
-          <button class="ed-btn" onclick="openEffectLibrary()">⚡ 音效</button>
+          <button class="ed-btn" onclick="document.getElementById('effectFileInput').click()">⚡ 音效</button>
           <button class="ed-btn" onclick="splitSelectedClip()">✂️ 分割</button>
           <button class="ed-btn" onclick="deleteSelectedClip()">🗑 刪除</button>
         </div>
@@ -1011,33 +1050,6 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
         category: "震撼",
 
         tags: "純音樂 ｜ 震撼卡點 ｜ 自由品勢"
-      },
-      {
-        id: "music02",
-        title: "Dark",
-        file: "music02.mp3",
-        downloadName: "Dark.mp3",
-        duration: "159 秒",
-        category: "震撼",
-        tags: "震撼 ｜ 電影感 ｜ 自由品勢"
-      },
-      {
-        id: "music03",
-        title: "Suspense Tension",
-        file: "music03.mp3",
-        downloadName: "Suspense-Tension.mp3",
-        duration: "59 秒",
-        category: "震撼",
-        tags: "震撼 ｜ 緊張感 ｜ 自由品勢"
-      },
-      {
-        id: "music04",
-        title: "Aggressive Low Frequency Growl",
-        file: "music04.mp3",
-        downloadName: "Aggressive-Low-Frequency-Growl.mp3",
-        duration: "37 秒",
-        category: "震撼",
-        tags: "震撼 ｜ 低頻 ｜ 音效感 ｜ 自由品勢"
       }
 
       /*
@@ -2265,5 +2277,5 @@ function checkPassword() {
      密碼登入結束
      ====================================== -->
 
-<div id="effectLibraryModal" class="effect-modal" style="display:none"><div class="effect-panel"><div class="effect-head"><b>⚡ 自由品勢音效庫</b><button type="button" onclick="closeEffectLibrary()">✕</button></div><div class="effect-sub">先試聽，喜歡再直接加入新的音效軌。</div><div id="effectLibraryList" class="effect-list"></div><button class="effect-upload-own" type="button" onclick="document.getElementById('effectFileInput').click()">⬆️ 上傳自己的音效</button></div></div></body>
+</body>
 </html>
