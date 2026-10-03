@@ -488,7 +488,8 @@ function showMusicEditor(){
       <input id="effectFileInput" type="file" accept="audio/*" multiple hidden>
       <div class="editor-topbar">
         <div class="editor-tool-row">
-          <button class="ed-btn primary" onclick="document.getElementById('musicFileInput').click()">＋ 音樂</button>
+          <button class="ed-btn primary" onclick="openEditorFavorites()">♥ 我的最愛</button>
+          <button class="ed-btn" onclick="document.getElementById('musicFileInput').click()">⬆️ 上傳音樂</button>
           <button class="ed-btn" onclick="document.getElementById('effectFileInput').click()">⚡ 音效</button>
           <button class="ed-btn" onclick="splitSelectedClip()">✂️ 分割</button>
           <button class="ed-btn" onclick="deleteSelectedClip()">🗑 刪除</button>
@@ -500,6 +501,13 @@ function showMusicEditor(){
           <button class="ed-btn" onclick="document.getElementById('projectFileInput').click()">📂 紀錄</button>
         </div>
         <input id="projectFileInput" type="file" accept=".zip,application/zip" style="display:none" onchange="openWorkPackage(this.files[0]);this.value=''">
+      </div>
+      <div id="editorFavoritesPanel" class="editor-favorites-panel" style="display:none">
+        <div class="editor-favorites-head">
+          <strong>♥ 我的最愛</strong>
+          <button type="button" onclick="closeEditorFavorites()">✕</button>
+        </div>
+        <div id="editorFavoritesList"></div>
       </div>
       <div class="transport">
         <button id="timelinePlayBtn" class="round-play" onclick="toggleTimelinePlay()">▶</button>
@@ -536,7 +544,85 @@ function showMusicEditor(){
 }
 function installEditorStyles(){ if(document.getElementById('editorStyles'))return; const s=document.createElement('style'); s.id='editorStyles'; s.textContent=`
 .editor-card{padding:16px!important;overflow:hidden}.editor-topbar{display:flex;flex-wrap:nowrap;gap:7px;overflow-x:auto;overflow-y:hidden;padding:8px 0 12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.editor-topbar .ed-btn{flex:0 0 auto}.editor-topbar{flex-direction:column!important;overflow:visible!important}.editor-tool-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;width:100%}.editor-tool-row .ed-btn{width:100%;min-width:0}@media(max-width:650px){.editor-tool-row{gap:5px}.editor-tool-row .ed-btn{font-size:12px;padding:9px 3px}}.ed-btn{border:0;border-radius:9px;background:#30303d;color:#fff;padding:10px 13px;white-space:nowrap;font-weight:700}.ed-btn.primary{background:#744cff}.transport{display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 0 13px}.round-play{width:46px;height:46px;border-radius:50%;border:0;background:#fff;color:#111;font-size:20px}.big-time{font-variant-numeric:tabular-nums;font-weight:800;font-size:17px}.timeline-viewport{height:390px;position:relative;overflow:hidden;background:#09090e;border-radius:12px;border:1px solid #292936;touch-action:none;user-select:none}.timeline-stage{position:absolute;inset:0;height:100%;width:100%}.time-ruler{position:absolute;top:0;left:0;right:0;height:34px;border-bottom:1px solid #343440;background:#111118}.tracks-area{position:absolute;top:34px;left:0;right:0}.track-row{position:absolute;left:0;height:76px;border-bottom:1px solid #262632}.track-label{position:absolute;left:0;z-index:8;width:${TRACK_LABEL_WIDTH}px;height:100%;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:6px;color:#aaa;background:linear-gradient(90deg,#0d0d13 88%,transparent);font-size:11px}.track-name{white-space:nowrap}.track-audio-buttons{display:flex;gap:4px}.track-audio-btn{border:1px solid #444;border-radius:6px;background:#24242e;color:#fff;padding:3px 5px;font-size:10px;line-height:1.2}.track-audio-btn.active{background:#744cff;border-color:#9b83ff}.clip{position:absolute;top:7px;height:62px;border:2px solid #6d5ce7;border-radius:7px;background:#29204a;overflow:hidden;touch-action:none}.clip.selected{border-color:#fff;box-shadow:0 0 0 1px #fff}.clip.effect{background:#49341f;border-color:#ffb020}.clip-title{height:20px;padding:3px 7px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clip canvas{display:block;width:100%;height:38px}.trim-handle{position:absolute;top:0;bottom:0;width:14px;z-index:15;display:none;cursor:ew-resize;touch-action:none;background:rgba(255,255,255,.16)}.clip.selected .trim-handle{display:block}.trim-handle.left{left:0;border-left:4px solid #fff}.trim-handle.right{right:0;border-right:4px solid #fff}.trim-handle:before{content:"";position:absolute;top:20px;width:3px;height:20px;border-radius:3px;background:#fff}.trim-handle.left:before{left:4px}.trim-handle.right:before{right:4px}.trim-time{position:fixed;z-index:99999;display:none;padding:7px 10px;border-radius:8px;background:#fff;color:#111;font-weight:800;font-size:14px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.45)}.track-audio-btn.muted{background:#d60000!important;border:2px solid #ff5a5a!important;color:#fff!important;font-size:12px!important;font-weight:900!important;min-width:48px;min-height:30px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,0,0,.18)}.fixed-playhead{position:absolute;top:0;bottom:0;left:${TRACK_LABEL_WIDTH}px;width:2px;background:#fff;z-index:30;pointer-events:none;box-shadow:0 0 4px #000}.playhead-cap{position:absolute;top:0;left:-6px;width:14px;height:14px;background:#fff;border-radius:2px 2px 8px 8px}.timeline-status{text-align:center;color:#aaa;font-size:13px;padding:10px}.bottom-tools{display:flex;justify-content:space-around;gap:5px;border-top:1px solid #30303b;padding-top:10px}.tool-btn{flex:1;min-width:58px;border:0;background:transparent;color:#fff;font-size:21px;padding:6px 2px}.tool-btn span{display:block;font-size:11px;margin-top:4px}.editor-help{color:#8f8fa2;font-size:12px;text-align:center;margin-top:10px;line-height:1.6}.finished-song-area{margin-top:14px;padding:16px;border:1px solid #383848;border-radius:12px;background:#15151d;text-align:center}.finished-song-title{font-size:20px;font-weight:900;margin-bottom:5px}.finished-song-note{font-size:12px;color:#aaa;margin-bottom:12px}.finished-song-area audio{display:block;width:100%;margin:0 auto 12px}.finished-download{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:10px;background:#744cff;color:#fff;text-decoration:none;font-weight:900}.finished-download:hover{filter:brightness(1.08)}.finished-custom-player{display:flex;align-items:center;gap:8px;width:100%;margin:0 auto 12px;padding:10px;border-radius:10px;background:#20202a}.finished-custom-player button{width:38px;height:38px;flex:0 0 38px;border:0;border-radius:50%;background:#fff;color:#111;font-size:16px;font-weight:900}.finished-custom-player span{font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}.finished-custom-player #finishedSeek{flex:1;min-width:60px}.finished-custom-player #finishedVolume{width:78px}.finished-download{border:0;cursor:pointer}@media(max-width:650px){.finished-volume-icon,#finishedVolume{display:none}}.tick{position:absolute;top:0;height:100%;border-left:1px solid #4a4a55;color:#aaa;font-size:10px;padding-left:3px}.tick.minor{height:10px;color:transparent;border-color:#30303a}.empty-track{position:absolute;left:100px;top:20px;color:#666;font-size:13px}@media(max-width:650px){.music-list{width:100%}.editor-card{border-radius:0!important;padding:10px!important}.timeline-viewport{height:360px}.ed-btn{padding:9px 11px}.big-time{font-size:15px}.tool-btn{font-size:19px}}
+
+.editor-tool-row:first-child{grid-template-columns:repeat(5,minmax(0,1fr))}
+.editor-favorites-panel{margin:3px 0 12px;padding:12px;border:1px solid #383848;border-radius:12px;background:#111118}
+.editor-favorites-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.editor-favorites-head button{border:0;border-radius:8px;background:#2b2b38;color:#fff;width:34px;height:30px;cursor:pointer}
+.editor-favorite-item{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid #292936}
+.editor-favorite-item:first-child{border-top:0}
+.editor-favorite-info{flex:1;min-width:0}
+.editor-favorite-title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.editor-favorite-meta{font-size:11px;color:#9999aa;margin-top:3px}
+.editor-add-favorite{flex:0 0 auto;border:0;border-radius:8px;background:#744cff;color:#fff;padding:8px 10px;font-weight:800;cursor:pointer}
+.editor-add-favorite:disabled{opacity:.6}
+.editor-favorite-empty{text-align:center;color:#9999aa;padding:18px 6px}
+@media(max-width:650px){
+ .editor-tool-row:first-child{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .editor-tool-row:first-child .ed-btn{font-size:10px;padding:9px 2px;white-space:normal;line-height:1.15}
+}
 `; document.head.appendChild(s); }
+
+function openEditorFavorites(){
+  const panel=document.getElementById('editorFavoritesPanel');
+  const list=document.getElementById('editorFavoritesList');
+  if(!panel||!list)return;
+  const favs=songs.filter(song=>isFavorite(song.id));
+  list.innerHTML=favs.length?favs.map(song=>`
+    <div class="editor-favorite-item">
+      <div class="editor-favorite-info">
+        <div class="editor-favorite-title">${escapeHtml(song.title)}</div>
+        <div class="editor-favorite-meta">${escapeHtml(song.duration)} ｜ ${escapeHtml(song.tags)}</div>
+      </div>
+      <button type="button" class="editor-add-favorite" onclick="addFavoriteSongToEditor('${song.id}',this)">＋ 加入音軌</button>
+    </div>`).join(''):'<div class="editor-favorite-empty">目前還沒有收藏歌曲。<br>回主頁按 ♡ 收藏後，就會出現在這裡。</div>';
+  panel.style.display='block';
+}
+function closeEditorFavorites(){
+  const p=document.getElementById('editorFavoritesPanel');if(p)p.style.display='none';
+}
+async function addFavoriteSongToEditor(songId,btn){
+  const song=songs.find(s=>s.id===songId);
+  if(!song)return alert('找不到這首歌曲。');
+  if(location.protocol==='file:'){
+    alert('現在是直接開啟電腦裡的 HTML，所以瀏覽器不能自動抓網站的 MP3。\\n請上傳到 GitHub Pages 後測試「我的最愛 → 加入音軌」。\\n本機仍可使用「⬆️ 上傳音樂」。');
+    return;
+  }
+  const old=btn?btn.textContent:'＋ 加入音軌';
+  try{
+    if(btn){btn.disabled=true;btn.textContent='載入中…';}
+    if(!editorAudioContext)editorAudioContext=new(window.AudioContext||window.webkitAudioContext)();
+    if(editorAudioContext.state==='suspended')await editorAudioContext.resume();
+
+    const url=new URL(song.file,document.baseURI).href;
+    const res=await fetch(url,{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const bytes=await res.arrayBuffer();
+    const buffer=await editorAudioContext.decodeAudioData(bytes.slice(0));
+
+    const filename=(song.file.split('/').pop()||song.downloadName||song.id+'.mp3');
+    const ext=(filename.split('.').pop()||'mp3').toLowerCase();
+    const type=ext==='wav'?'audio/wav':ext==='m4a'?'audio/mp4':'audio/mpeg';
+    const file=new File([bytes],filename,{type});
+
+    snapshot();
+    const sourceIndex=editorSources.length;
+    editorSources.push({file,buffer,isEffect:false,librarySongId:song.id});
+    const track=nextFreeTrack();
+    const clip=newClip(sourceIndex,0,buffer.duration,0,track,false);
+    timelineClips.push(clip);
+    selectedClipId=clip.id;
+    editorPlayhead=0;
+    renderTimeline();
+
+    if(btn){btn.textContent='✓ 已加入';setTimeout(()=>{btn.disabled=false;btn.textContent=old},900);}
+  }catch(err){
+    console.error(err);
+    if(btn){btn.disabled=false;btn.textContent=old;}
+    alert('無法把這首歌加入音軌。\\n請確認 GitHub 裡的 '+song.file+' 與 index.html 放在同一層。');
+  }
+}
+
 function snapshot(){ historyStack.push(JSON.stringify(timelineClips)); if(historyStack.length>40)historyStack.shift(); redoStack=[]; }
 function undoEditor(){ if(!historyStack.length)return; stopTimeline(); redoStack.push(JSON.stringify(timelineClips)); timelineClips=JSON.parse(historyStack.pop()); selectedClipId=null; renderTimeline(); }
 function redoEditor(){ if(!redoStack.length)return; stopTimeline(); historyStack.push(JSON.stringify(timelineClips)); timelineClips=JSON.parse(redoStack.pop()); selectedClipId=null; renderTimeline(); }
@@ -650,7 +736,7 @@ function renderTimeline(){
     // 每次重畫時間軸，都依 track.mute 重新套用正確外觀，靜音提示不會被洗掉。
     updateTrackMuteButton(tr);
   }
-  if(!timelineClips.length){const e=document.createElement('div');e.className='empty-track';e.style.left=(TRACK_LABEL_WIDTH+10)+'px';e.textContent='按「＋ 音樂」加入第一首音樂';area.appendChild(e)}
+  if(!timelineClips.length){const e=document.createElement('div');e.className='empty-track';e.style.left=(TRACK_LABEL_WIDTH+10)+'px';e.textContent='按「♥ 我的最愛」或「⬆️ 上傳音樂」加入第一首音樂';area.appendChild(e)}
   timelineClips.forEach(c=>{
     const src=editorSources[c.sourceIndex];if(!src)return;
     const el=document.createElement('div');el.className='clip '+(c.id===selectedClipId?'selected ':'')+(c.isEffect?'effect':'');el.dataset.id=c.id;
