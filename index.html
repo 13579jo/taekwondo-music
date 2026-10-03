@@ -44,7 +44,9 @@
       width: 90%;
       max-width: 900px;
       margin: 25px auto 10px;
-      display: block;
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 10px;
     }
 
     .search-box,
@@ -389,21 +391,51 @@ body.editor-mode [data-nav="workpackage"] { display:none !important; }
 
 
   <!-- =========================
-     02｜功能選單
-     作用：主頁、上傳、最愛、剪輯、作品、工作包集中在此
+     02｜搜尋與分類
+     作用：搜尋歌曲、切換分類、進入音樂剪輯
 ========================= -->
+
   <div class="controls">
-    <select id="categorySelect" class="category-select" onchange="handleCategoryChange()">
-      <option value="" selected>功能選單</option>
-      <option value="home">🏠 主頁</option>
-      <option value="upload">⬆️ 上傳音樂</option>
-      <option value="favorites">♥ 我的最愛</option>
-      <option value="editor">✂️ 剪輯音樂</option>
-      <option value="works">🎵 剪輯作品</option>
-      <option value="workpackage">📂 工作包</option>
+
+    <input
+      id="searchInput"
+      class="search-box"
+      type="text"
+      placeholder="🔎 搜尋音樂..."
+      oninput="renderSongs()"
+    >
+
+    <select
+      id="categorySelect"
+      class="category-select"
+      onchange="handleCategoryChange()"
+    >
+      <option value="全部">全部分類</option>
+      <option value="震撼">震撼</option>
+      <option value="東方">東方武術</option>
+      <option value="電子">電子</option>
+      <option value="優雅">優雅</option>
+      <option value="剪輯">✂️ 音樂剪輯</option>
     </select>
+
+  </div>
+
+
+  <!-- =========================
+     03｜全部音樂 / 我的最愛
+     作用：切換全部歌曲與收藏歌曲
+========================= -->
+
+  <div class="tabs main-nav">
+    <button id="homeTab" class="tab-button active" onclick="showHomePage()">🏠 回主頁</button>
+    <button id="uploadTab" class="tab-button" onclick="openLibraryUpload()">⬆️ 上傳音樂</button>
+    <button id="favoriteTab" class="tab-button" onclick="showFavorites()">♥ 我的最愛</button>
+    <button id="editTab" class="tab-button" onclick="openEditorFromNav()" data-nav="editor">✂️ 剪輯音樂</button>
+    <button id="worksTab" class="tab-button" onclick="showFinishedWorks()">🎵 剪輯作品</button>
+    <button id="packagesTab" class="tab-button" onclick="showWorkPackages()" data-nav="workpackage">📂 工作包</button>
     <input id="libraryUploadInput" type="file" accept="audio/*" multiple hidden onchange="handleLibraryUpload(this.files);this.value=''">
   </div>
+
 
   <div id="stats" class="stats"></div>
 
@@ -434,16 +466,15 @@ function setEditorOnlyUI(isEditor){
   if(search) search.style.display=isEditor?'none':'';
 }
 function handleCategoryChange(){
-  const menu=document.getElementById('categorySelect');
-  const action=menu ? menu.value : '';
-  if(!action)return;
-  if(action==='home')showHomePage();
-  else if(action==='upload')openLibraryUpload();
-  else if(action==='favorites')showFavorites();
-  else if(action==='editor')openEditorFromNav();
-  else if(action==='works')showFinishedWorks();
-  else if(action==='workpackage')showWorkPackages();
-  if(menu)menu.value='';
+  const category=document.getElementById('categorySelect').value;
+  if(category==='剪輯'){
+    setEditorOnlyUI(true);
+    showMusicEditor();
+  } else {
+    setEditorOnlyUI(false);
+    const editor=document.getElementById('musicEditor'); if(editor) editor.style.display='none';
+    document.getElementById('musicList').style.display=''; document.getElementById('stats').style.display=''; renderSongs();
+  }
 }
 function showMusicEditor(){
   document.getElementById('musicList').style.display='none'; document.getElementById('stats').style.display='none';
@@ -982,7 +1013,7 @@ async function openWorkPackage(file){
     if(finishedSongUrl){URL.revokeObjectURL(finishedSongUrl);finishedSongUrl=null;}
     const area=document.getElementById('finishedSongArea');if(area)area.style.display='none';
 
-    document.getElementById('categorySelect').value='';
+    document.getElementById('categorySelect').value='剪輯';
     setEditorOnlyUI(true);
     showMusicEditor();
     renderTimeline();
@@ -1149,7 +1180,7 @@ function drawClipWave(canvas,buffer,start,end,color){const ctx=canvas.getContext
     }
     function openEditorFromNav(){
       hideFeaturePanel(); setMainNavActive('editTab');
-      document.getElementById('categorySelect').value='';
+      document.getElementById('categorySelect').value='剪輯';
       setEditorOnlyUI(true); showMusicEditor();
     }
     function showFeaturePanel(type){
